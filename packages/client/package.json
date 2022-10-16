@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/index.ts src/worker.ts --bundle --minify --platform=neutral --target=es2020 --outdir=lib"
+    "build": "esbuild src/index.ts --bundle --minify --platform=neutral --target=es2020 --outdir=lib"
   },
   "dependencies": {
     "node-fetch": "^3.2.10"
   },
   "devDependencies": {
-    "idb-keyval": "^6.2.0",
-    "esbuild": "^0.15.11"
+    "esbuild": "^0.15.11",
+    "idb-keyval": "^6.2.0"
   }
 }

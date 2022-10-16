@@ -11,8 +11,14 @@ importers:
       idb-keyval: ^6.2.0
       node-fetch: ^3.2.10
     dependencies:
-      idb-keyval: 6.2.0
       node-fetch: 3.2.10
+    devDependencies:
+      esbuild: 0.15.11
+      idb-keyval: 6.2.0
+
+  packages/external-ui:
+    specifiers:
+      esbuild: ^0.15.11
     devDependencies:
       esbuild: 0.15.11
 
@@ -300,7 +306,6 @@ packages:
     resolution: {integrity: sha512-uw+MIyQn2jl3+hroD7hF8J7PUviBU7BPKWw4f/ISf32D4LoGu98yHjrzWWJDASu9QNrX10tCJqk9YY0ClWm8Ng==}
     dependencies:
       safari-14-idb-fix: 3.0.0
-    dev: false
 
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -367,7 +372,6 @@ packages:
 
   /safari-14-idb-fix/3.0.0:
     resolution: {integrity: sha512-eBNFLob4PMq8JA1dGyFn6G97q3/WzNtFK4RnzT1fnLq+9RyrGknzYiM/9B12MnKAxuj1IXr7UKYtTNtjyKMBog==}
-    dev: false
 
   /scheduler/0.23.0:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}

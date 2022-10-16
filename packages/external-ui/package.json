@@ -1,0 +1,12 @@
+{
+  "name": "@keygate/accounts",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/index.ts src/worker.ts --bundle --minify --platform=neutral --target=es2020 --outdir=lib"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "esbuild": "^0.15.11"
+  }
+}
