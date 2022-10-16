@@ -1,4 +1,4 @@
-export type WorkerResponses = {
+export type ServerResponses = {
   login: { success: boolean };
   logout: { success: boolean };
 };
@@ -8,10 +8,10 @@ export type ClientParams = {
   logout: {};
 };
 
-export type Methods = keyof WorkerResponses | keyof ClientParams;
+export type Methods = keyof ServerResponses | keyof ClientParams;
 
 export type WorkerMessage<T extends Methods> = {
   method: T;
-  response: WorkerResponses[T] | { error: string };
+  response: ServerResponses[T] | { error: string };
   id: number;
 };

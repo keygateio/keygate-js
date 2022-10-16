@@ -1,5 +1,9 @@
 import { AsyncStorageBackends, KeyGateOptions, StorageBackends } from ".";
 import * as idbkv from "idb-keyval";
+import { sha256 } from "./utils";
+
+const isBrowser = typeof window !== "undefined";
+const sessionTokenKey = "session_token";
 
 export interface SyncStorage {
   getItem(key: string): string | null;
@@ -15,97 +19,148 @@ export interface AsyncStorage {
   [name: string]: any;
 }
 
+export interface SessionTokenBody {
+  uid: string;
+  expires: number;
+  nonce: string;
+}
+
 export type Storage = SyncStorage | AsyncStorage;
 
 export const createTokenKeeper = <T extends StorageBackends>(
   options: KeyGateOptions<T>
 ) => {
   let storage: Storage | undefined;
-  let inMemoryToken: string | null = null;
+  let inMemorySessionToken: string | null = null;
   let allowConstruct = true;
-  const tokenKey = "dG9rZW4";
 
-  const isBrowser = typeof window !== "undefined";
   const isDesktop = isBrowser
     ? (navigator as any).userAgentData.mobile === true
     : false;
 
-  class TokenKeeper {
+  class SessionTokenKeeper {
     constructor(options: KeyGateOptions<T>) {
-      if (!allowConstruct) {
-        throw new Error("TokenKeeper can't be constructed");
-      }
-
-      switch (options.storageBackend) {
-        case "indexedDB":
-          if (!isBrowser)
-            throw new Error("indexedDB is not supported in this environment");
-          storage = {
-            setItem: idbkv.set,
-            getItem: idbkv.get,
-            removeItem: idbkv.del,
-          };
-          break;
-        case "secureStorage":
-          storage = options.secureStorage;
-          break;
-        case "sessionStorage":
-          if (!isBrowser)
-            throw new Error(
-              "sessionStorage is not supported in this environment"
-            );
-          storage = window.sessionStorage;
-          break;
-        case "memory":
-          storage = undefined;
-          break;
-        default:
-          storage = window.localStorage;
-      }
+      if (!allowConstruct)
+        throw new Error("SessionTokenKeeper can't be constructed");
+      storage = selectStorageBackend(options);
     }
 
     load(): T extends AsyncStorageBackends ? Promise<void> : void {
-
-      // beforeunload is unreliable on mobile, so we don't use it there
+      // to improve security, we don't want to store the session token in localStorage
+      // on desktop, so we only keep it in memory and persist it on unload
+      // (beforeunload is unreliable on mobile, so we don't use this there)
       if (isDesktop)
         addEventListener("beforeunload", this.beforeUnloadListener, {
           capture: true,
         });
 
+      // storage is undefined if we only use in-memory storage
       if (!storage) return undefined as any;
-      const token = storage.getItem(tokenKey);
-      if (typeof token === "string") {
-        inMemoryToken = token;
-        if (isDesktop) this.clearToken();
+
+      // can be a promise if we use async storage
+      const sessionToken = storage.getItem(sessionTokenKey);
+
+      // sync storage backend
+      if (typeof sessionToken === "string") {
+        inMemorySessionToken = sessionToken;
+        if (isDesktop) this.clearSessionToken();
         return undefined as any;
       }
 
-      return token?.then((token) => {
-        if (token) inMemoryToken = token;
+      // async storage backend
+      return sessionToken?.then((sessionToken) => {
+        if (sessionToken) inMemorySessionToken = sessionToken;
       }) as any;
     }
 
     beforeUnloadListener() {
-      if (inMemoryToken) void this.setTokenInStorage(inMemoryToken);
+      if (inMemorySessionToken)
+        void this.setSessionTokenInStorage(inMemorySessionToken);
     }
 
-    getToken() {
-      if (inMemoryToken) return inMemoryToken;
+    /**
+     * Parses a session token and returns the body
+     * (or throws an error if the token is invalid)
+     *
+     * Does **not** check if the token is expired
+     */
+    parseSessionToken(sessionToken: string) {
+      // KEYGATE tokens don't have a signature (it's a JWT without the signature)
+      const [header, payload, _signature] = sessionToken.split(".");
+      if (!header || !payload) throw new Error("Invalid session token");
+
+      let headerObj, payloadObj: SessionTokenBody;
+      try {
+        headerObj = JSON.parse(atob(header));
+        payloadObj = JSON.parse(atob(payload));
+      } catch (_: unknown) {
+        throw new Error("Invalid session token");
+      }
+
+      if (
+        headerObj.typ !== "KEYGATE" ||
+        typeof payloadObj.expires !== "number" ||
+        typeof payloadObj.nonce !== "string" ||
+        typeof payloadObj.uid !== "string"
+      )
+        throw new Error("Invalid session token");
+
+      return payloadObj;
     }
 
-    async setToken(token: string) {
-      inMemoryToken = token;
-      if (!isDesktop) await this.setTokenInStorage(token);
+    getSessionToken() {
+      if (!inMemorySessionToken) return null;
+
+      const token = this.parseSessionToken(inMemorySessionToken);
+      if (!token) return null;
+
+      return {
+        token,
+        hash: sha256(inMemorySessionToken),
+      };
     }
 
-    async setTokenInStorage(token: string) {
-      await storage?.setItem?.(tokenKey, token);
+    async setSessionToken(sessionToken: string) {
+      inMemorySessionToken = sessionToken;
+      if (!isDesktop) await this.setSessionTokenInStorage(sessionToken);
     }
 
-    async clearToken() {
-      await storage?.removeItem?.(tokenKey);
-    }
+    setSessionTokenInStorage = (sessionToken: string) =>
+      storage?.setItem?.(sessionTokenKey, sessionToken);
+
+    clearSessionToken = () => storage?.removeItem?.(sessionTokenKey);
   }
 
-  return new TokenKeeper(options);
+  return new SessionTokenKeeper(options);
+};
+
+export const selectStorageBackend = <T extends StorageBackends>(
+  options: KeyGateOptions<T>
+): Storage | undefined => {
+  switch (options.storageBackend) {
+    case "indexedDB":
+      if (!isBrowser)
+        throw new Error("indexedDB is not supported in this environment");
+      return {
+        setItem: idbkv.set,
+        getItem: idbkv.get,
+        removeItem: idbkv.del,
+      };
+    case "secureStorage":
+      if (!options.secureStorage)
+        throw new Error("secureStorage is not provided");
+      return options.secureStorage;
+    case "sessionStorage":
+      if (!isBrowser)
+        throw new Error("sessionStorage is not supported in this environment");
+      return window.sessionStorage;
+    case "memory":
+      return undefined;
+    default:
+      if (!isBrowser)
+        throw new Error(
+          "localStorage is not supported in this environment, use secureStorage instead"
+        );
+      return window.localStorage;
+  }
 };
