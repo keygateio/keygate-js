@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/index.ts src/worker.ts --bundle --minify --platform=neutral --target=es2020 --outdir=lib"
+    "build": "esbuild src/index.ts --bundle --minify --platform=neutral --target=es2020 --outdir=lib"
   },
   "dependencies": {},
   "devDependencies": {

@@ -1,5 +1,4 @@
 import { AsyncStorageBackends, KeyGateOptions, StorageBackends } from ".";
-import * as idbkv from "idb-keyval";
 import { sha256 } from "./utils";
 
 const isBrowser = typeof window !== "undefined";
@@ -138,14 +137,6 @@ export const selectStorageBackend = <T extends StorageBackends>(
   options: KeyGateOptions<T>
 ): Storage | undefined => {
   switch (options.storageBackend) {
-    case "indexedDB":
-      if (!isBrowser)
-        throw new Error("indexedDB is not supported in this environment");
-      return {
-        setItem: idbkv.set,
-        getItem: idbkv.get,
-        removeItem: idbkv.del,
-      };
     case "secureStorage":
       if (!options.secureStorage)
         throw new Error("secureStorage is not provided");

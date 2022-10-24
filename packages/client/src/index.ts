@@ -1,8 +1,7 @@
-import { createIframeConnection, Iframe } from "./iframe";
 import { createTokenKeeper } from "./tokens";
 
 export type SyncStorageBackends = "localStorage" | "sessionStorage" | "memory";
-export type AsyncStorageBackends = "indexedDB" | "secureStorage";
+export type AsyncStorageBackends = "secureStorage";
 export type StorageBackends = SyncStorageBackends | AsyncStorageBackends;
 
 export type KeyGateOptions<T extends StorageBackends> = {
@@ -11,8 +10,9 @@ export type KeyGateOptions<T extends StorageBackends> = {
   apiURL: string;
 
   /**
+   * NOT IMPLEMENTED YET
    * Set this to true if the keygate is running on a different top-level domain than the
-   * application. This will create an iframe connection to keygate. (only works in browsers)
+   * application. (only works in browsers)
    * @default false
    */
   crossDomain?: true;
@@ -21,7 +21,7 @@ export type KeyGateOptions<T extends StorageBackends> = {
    * The mode of authentication, currently only "integrated" is supported
    *
    * * `integrated` - authentication is integrated into the client
-   * * `external` - **not implemented yet**: authentication ui is handled by keygate server,
+   * * `external` - authentication ui is handled by keygate server,
    *
    * @default 'integrated'
    */
@@ -59,7 +59,7 @@ export interface KeyGate {
  * const keygate = createKeyGate({
  *   domain: "example.com",
  *   apiKey: "my-api-key",
- *   apiURL: "https://api.keygate.dev",
+ *   apiURL: "https://accounts.keygate.dev",
  *   mode: "integrated",
  * });
  * ```
@@ -73,16 +73,6 @@ export const createKeygateClient = <T extends StorageBackends>(
   const tokenKeeper = createTokenKeeper(options);
   const promise = tokenKeeper.load();
   const allowConstruct = true;
-
-  const isBrowser = typeof window !== "undefined";
-
-  let iframe: Iframe;
-  let iframePromise: Promise<Iframe> | undefined;
-  if (options.crossDomain && isBrowser)
-    iframePromise = createIframeConnection(`${options.apiURL}/iframe`);
-
-  if (typeof Worker === "undefined")
-    throw new Error("KeyGate requires a browser with Web Workers");
 
   class KeyGateImplementation implements KeyGate {
     constructor() {
@@ -138,25 +128,15 @@ export const createKeygateClient = <T extends StorageBackends>(
      * **Note:** you should not need to call this manually, it is called automatically when needed
      */
     async refreshAccessToken() {
-      if (!iframe && iframePromise) iframe = await iframePromise;
+      const resp = await this.fetch(`${options.apiURL}/api/v1/refresh`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      if (options.crossDomain && isBrowser) {
-        const frame = await iframePromise;
-        const { token } = await iframe.postMessage<{ token: string }>(
-          "refreshAccessToken"
-        );
-        await tokenKeeper.setSessionToken(token);
-      } else {
-        const resp = await this.fetch(`${options.apiURL}/api/v1/refresh`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const { token }: { token: string } = await resp.json();
-        await tokenKeeper.setSessionToken(token);
-      }
+      const { token }: { token: string } = await resp.json();
+      await tokenKeeper.setSessionToken(token);
 
       return;
     }
