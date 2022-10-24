@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --minify --platform=neutral --target=es2022 --outdir=lib"
+    "build": "esbuild src/index.ts --bundle --external:node-fetch --platform=neutral --target=es2022 --outdir=lib"
   },
-  "dependencies": {
+  "peerDependencies": {
     "node-fetch": "^3.2.10"
+  },
+  "peerDependenciesMeta": {
+    "node-fetch": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "esbuild": "^0.15.11",
-    "idb-keyval": "^6.2.0"
+    "node-fetch": "^3.2.10"
   }
 }

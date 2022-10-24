@@ -20,11 +20,19 @@ export interface AsyncStorage {
 
 export interface SessionTokenBody {
   uid: string;
-  expires: number;
+  exp: number;
   nonce: string;
 }
 
 export type Storage = SyncStorage | AsyncStorage;
+
+export interface SessionTokenKeeper<T extends StorageBackends> {
+  getSessionToken(): { token: SessionTokenBody; hash: Promise<string> } | null;
+  setSessionToken(
+    token: string
+  ): T extends AsyncStorageBackends ? Promise<void> : void;
+  sessionTokenStatus(): "expired" | "valid" | "missing" 
+}
 
 export const createTokenKeeper = <T extends StorageBackends>(
   options: KeyGateOptions<T>
@@ -37,7 +45,7 @@ export const createTokenKeeper = <T extends StorageBackends>(
     ? (navigator as any).userAgentData.mobile === true
     : false;
 
-  class SessionTokenKeeper {
+  class SessionTokenKeeperImplementation implements SessionTokenKeeper<T> {
     constructor(options: KeyGateOptions<T>) {
       if (!allowConstruct)
         throw new Error("SessionTokenKeeper can't be constructed");
@@ -98,13 +106,24 @@ export const createTokenKeeper = <T extends StorageBackends>(
 
       if (
         headerObj.typ !== "KEYGATE" ||
-        typeof payloadObj.expires !== "number" ||
+        typeof payloadObj.exp !== "number" ||
         typeof payloadObj.nonce !== "string" ||
         typeof payloadObj.uid !== "string"
       )
         throw new Error("Invalid session token");
 
       return payloadObj;
+    }
+
+    sessionTokenStatus(): "expired" | "valid" | "missing" {
+      if (!inMemorySessionToken) return "missing";
+      try {
+        const { exp } = this.parseSessionToken(inMemorySessionToken);
+        return exp * 1000 < Date.now() ? "expired" : "valid";
+      } catch (_: unknown) {
+        this.clearSessionToken();
+        return "missing";
+      }
     }
 
     getSessionToken() {
@@ -119,9 +138,15 @@ export const createTokenKeeper = <T extends StorageBackends>(
       };
     }
 
-    async setSessionToken(sessionToken: string) {
+    setSessionToken(
+      sessionToken: string
+    ): T extends "secureStorage" ? Promise<void> : void {
       inMemorySessionToken = sessionToken;
-      if (!isDesktop) await this.setSessionTokenInStorage(sessionToken);
+      if (!isDesktop)
+        return this.setSessionTokenInStorage(
+          sessionToken
+        ) as unknown as T extends "secureStorage" ? Promise<void> : void; // is there a better way to do this in typescript?
+      return undefined as any;
     }
 
     setSessionTokenInStorage = (sessionToken: string) =>
@@ -130,7 +155,7 @@ export const createTokenKeeper = <T extends StorageBackends>(
     clearSessionToken = () => storage?.removeItem?.(sessionTokenKey);
   }
 
-  return new SessionTokenKeeper(options);
+  return new SessionTokenKeeperImplementation(options);
 };
 
 export const selectStorageBackend = <T extends StorageBackends>(

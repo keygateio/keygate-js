@@ -1,5 +1,7 @@
 import { createTokenKeeper } from "./tokens";
 
+import { Channel } from "./channel";
+
 export type SyncStorageBackends = "localStorage" | "sessionStorage" | "memory";
 export type AsyncStorageBackends = "secureStorage";
 export type StorageBackends = SyncStorageBackends | AsyncStorageBackends;
@@ -45,7 +47,7 @@ export type KeyGateOptions<T extends StorageBackends> = {
 export interface KeyGate {
   fetch: typeof fetch;
   authedFetch: typeof fetch;
-  // logout: () => Promise<boolean>;
+  logout: () => Promise<void>;
   // isLoggedIn: () => Promise<boolean>;
 }
 
@@ -73,12 +75,24 @@ export const createKeygateClient = <T extends StorageBackends>(
   const tokenKeeper = createTokenKeeper(options);
   const promise = tokenKeeper.load();
   const allowConstruct = true;
+  const channel = new Channel();
+
+  const needsFetch = typeof fetch === "undefined";
+  let fetcher = needsFetch && fetch;
 
   class KeyGateImplementation implements KeyGate {
     constructor() {
       if (!allowConstruct) {
         throw new Error("KeyGate can't be constructed");
       }
+      channel.onMessage((e) => {
+        if (channel.isLeader())
+          this.handleMessageLeader(e);
+      });
+    }
+
+    async handleMessageLeader(message) {
+
     }
 
     /**
@@ -102,7 +116,12 @@ export const createKeygateClient = <T extends StorageBackends>(
       );
       headers.set("X-KG-Key", options.apiKey);
       opts.headers = headers;
-      return fetch(input, init);
+
+      if (!fetcher) {
+        fetcher = await import("node-fetch").then(m => m.default) as typeof fetch;
+      }
+
+      return fetcher(input, init);
     }
 
     /**
@@ -124,7 +143,7 @@ export const createKeygateClient = <T extends StorageBackends>(
 
     /**
      * Refresh the session token
-     * 
+     *
      * **Note:** you should not need to call this manually, it is called automatically when needed
      */
     async refreshAccessToken() {
@@ -139,6 +158,11 @@ export const createKeygateClient = <T extends StorageBackends>(
       await tokenKeeper.setSessionToken(token);
 
       return;
+    }
+
+    async logout() {
+      await tokenKeeper.clearSessionToken();
+      channel.postMessage("logout");
     }
   }
 
