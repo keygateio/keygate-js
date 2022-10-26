@@ -31,7 +31,7 @@ export interface SessionTokenKeeper<T extends StorageBackends> {
   setSessionToken(
     token: string
   ): T extends AsyncStorageBackends ? Promise<void> : void;
-  sessionTokenStatus(): "expired" | "valid" | "missing" 
+  sessionTokenStatus(): "expired" | "valid" | "missing";
 }
 
 export const createTokenKeeper = <T extends StorageBackends>(
@@ -41,10 +41,6 @@ export const createTokenKeeper = <T extends StorageBackends>(
   let inMemorySessionToken: string | null = null;
   let allowConstruct = true;
 
-  const isDesktop = isBrowser
-    ? (navigator as any).userAgentData.mobile === true
-    : false;
-
   class SessionTokenKeeperImplementation implements SessionTokenKeeper<T> {
     constructor(options: KeyGateOptions<T>) {
       if (!allowConstruct)
@@ -53,14 +49,6 @@ export const createTokenKeeper = <T extends StorageBackends>(
     }
 
     load(): T extends AsyncStorageBackends ? Promise<void> : void {
-      // to improve security, we don't want to store the session token in localStorage
-      // on desktop, so we only keep it in memory and persist it on unload
-      // (beforeunload is unreliable on mobile, so we don't use this there)
-      if (isDesktop)
-        addEventListener("beforeunload", this.beforeUnloadListener, {
-          capture: true,
-        });
-
       // storage is undefined if we only use in-memory storage
       if (!storage) return undefined as any;
 
@@ -70,7 +58,6 @@ export const createTokenKeeper = <T extends StorageBackends>(
       // sync storage backend
       if (typeof sessionToken === "string") {
         inMemorySessionToken = sessionToken;
-        if (isDesktop) this.clearSessionToken();
         return undefined as any;
       }
 
@@ -142,11 +129,9 @@ export const createTokenKeeper = <T extends StorageBackends>(
       sessionToken: string
     ): T extends "secureStorage" ? Promise<void> : void {
       inMemorySessionToken = sessionToken;
-      if (!isDesktop)
-        return this.setSessionTokenInStorage(
-          sessionToken
-        ) as unknown as T extends "secureStorage" ? Promise<void> : void; // is there a better way to do this in typescript?
-      return undefined as any;
+      return this.setSessionTokenInStorage(
+        sessionToken
+      ) as unknown as T extends "secureStorage" ? Promise<void> : void; // is there a better way to do this in typescript?
     }
 
     setSessionTokenInStorage = (sessionToken: string) =>
@@ -171,12 +156,7 @@ export const selectStorageBackend = <T extends StorageBackends>(
         throw new Error("sessionStorage is not supported in this environment");
       return window.sessionStorage;
     case "memory":
-      return undefined;
     default:
-      if (!isBrowser)
-        throw new Error(
-          "localStorage is not supported in this environment, use secureStorage instead"
-        );
-      return window.localStorage;
+      return undefined;
   }
 };
