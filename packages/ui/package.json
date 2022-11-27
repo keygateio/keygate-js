@@ -1,7 +1,35 @@
 {
-  "name": "@keygate/ui",
-  "version": "1.0.0",
+  "name": "test",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/keygate-ui.es.js",
+  "exports": {
+    ".": "./dist/keygate-ui.es.js"
+  },
+  "types": "types/keygate-ui.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build"
+  },
   "dependencies": {
     "lit": "^2.4.0"
+  },
+  "peerDependencies": {
+    "@keygate/client": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@keygate/client": {
+      "optional": false
+    }
+  },
+  "devDependencies": {
+    "@keygate/client": "workspace:*",
+    "typescript": "^4.6.4",
+    "vite": "^3.2.3"
   }
 }

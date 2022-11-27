@@ -19,7 +19,7 @@ const client = createKeygateClient({
 
 `@keygate/server` is the client library for interacting with a keygate server from a `node.js` or `deno` server.
 
-## `@keygate/ui` - keygate UI (webcomponents)
+## `@keygate/ui` - keygate UI (Webcomponent)
 
 `@keygate/ui` provides ready-to-use UI components for keygate. It is based on [lit-element](https://lit-element.polymer-project.org/). It is not required to use keygate, but enables you to quickly get started.
 

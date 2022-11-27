@@ -1,5 +1,8 @@
 {
   "name": "keygate-js",
   "private": true,
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "rome": "10.0.1"
+  }
 }
