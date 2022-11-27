@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
-    "node-fetch": "^3.3.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3"
   }

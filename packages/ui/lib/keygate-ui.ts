@@ -3,30 +3,31 @@ import { customElement, property } from "lit/decorators.js";
 
 import { createKeygateClient, Keygate, KeygateOptions, StorageBackends } from "@keygate/client";
 
+import "./components/input";
 
 class KeygateClientController<T extends StorageBackends> implements ReactiveController {
 	host: ReactiveControllerHost;
 	clientReady = false;
 	client?: Keygate;
 
-	constructor(host: ReactiveControllerHost, customClient: boolean, initialOptions: Partial<KeygateOptions<T>> ) {
+	constructor(host: ReactiveControllerHost, customClient: boolean, initialOptions: Partial<KeygateOptions<T>>) {
 		(this.host = host).addController(this);
 
-    if (customClient) return;
+		if (customClient) return;
 
-		if (!initialOptions?.apiKey || !initialOptions.domain || !initialOptions?.apiURL) {
+		if (!(initialOptions?.apiKey && initialOptions.domain && initialOptions?.apiURL)) {
 			throw new Error("KeygateClientController: options not set");
 		}
 
-    let options: KeygateOptions<T> = {
-      domain: initialOptions.domain,
-      apiKey: initialOptions.apiKey,
-      apiURL: initialOptions.apiURL,
-      mode: initialOptions.mode,
-      storageBackend: initialOptions.storageBackend,
-    };
+		let options: KeygateOptions<T> = {
+			domain: initialOptions.domain,
+			apiKey: initialOptions.apiKey,
+			apiURL: initialOptions.apiURL,
+			mode: initialOptions.mode,
+			storageBackend: initialOptions.storageBackend,
+		};
 
-    let clientPromise = createKeygateClient(options);
+		let clientPromise = createKeygateClient(options);
 		if (clientPromise instanceof Promise) {
 			clientPromise.then((client) => {
 				this.client = client;
@@ -38,17 +39,16 @@ class KeygateClientController<T extends StorageBackends> implements ReactiveCont
 		}
 	}
 
-	hostConnected() {
-	}
+	hostConnected() {}
 }
 
 @customElement('keygate-ui')
 export class KeygateUI extends LitElement {
 	#keygate = new KeygateClientController(this, !!this.attributes.getNamedItem("custom-client"), {
-      domain: this.attributes.getNamedItem("domain")?.value,
-      apiKey: this.attributes.getNamedItem("api-key")?.value,
-      apiURL: this.attributes.getNamedItem("api-url")?.value,
-  });
+		domain: this.attributes.getNamedItem("domain")?.value,
+		apiKey: this.attributes.getNamedItem("api-key")?.value,
+		apiURL: this.attributes.getNamedItem("api-url")?.value,
+	});
 
 	@property({ type: Boolean, attribute: "custom-client" }) customClient: boolean = false;
 	@property({ type: String, attribute: "domain" }) domain?: string;
@@ -57,10 +57,10 @@ export class KeygateUI extends LitElement {
 
 	firstUpdated() {
 		console.log("client", this.#keygate.client);
-    this.#keygate.client?.authedFetch("https://accounts.keygate.dev/api/v1/users/me").then((res) => {
-      console.log("res", res);
-    });
-  }
+		this.#keygate.client?.authedFetch("https://accounts.keygate.dev/api/v1/users/me").then((res) => {
+			console.log("res", res);
+		});
+	}
 
 	render() {
 		return html`

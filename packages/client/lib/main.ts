@@ -120,7 +120,11 @@ export const createKeygateClient = <T extends StorageBackends>(
 			opts.headers = headers;
 
 			if (!fetcher) {
-				fetcher = (await import("node-fetch").then((m) => m.default)) as typeof fetch;
+				if (typeof window !== "undefined") {
+					fetcher = window.fetch;
+				} else {
+					throw new Error("`fetch` needs to be globally available");
+				}
 			}
 
 			return fetcher(input, init);

@@ -39,12 +39,12 @@ importers:
   packages/ui:
     specifiers:
       '@keygate/client': workspace:*
-      '@open-wc/lit-helpers': ^0.5.1
+      '@lit/localize': ^0.11.4
       lit: ^2.4.0
       typescript: ^4.6.4
       vite: ^3.2.3
     dependencies:
-      '@open-wc/lit-helpers': 0.5.1_lit@2.4.1
+      '@lit/localize': 0.11.4
       lit: 2.4.1
     devDependencies:
       '@keygate/client': link:../client
@@ -71,16 +71,15 @@ packages:
     dev: true
     optional: true
 
-  /@lit/reactive-element/1.4.2:
-    resolution: {integrity: sha512-VMOxsWh/QDwrxPsgkSQnuZ+8mfNy1OTjzzUdLBvvZtpahwPTHTeVZ51RZRqO4xfKVrR+btIPA8D01IL3xeG66w==}
+  /@lit/localize/0.11.4:
+    resolution: {integrity: sha512-RRIwIX2tAm3+DuEndoXSJrFjGrAK5cb5IXo5K6jcJ6sbgD829B8rSqHC5MaKVUmXTVLIR1bk5IZOZDf9wFereA==}
+    dependencies:
+      '@lit/reactive-element': 1.4.2
+      lit: 2.4.1
     dev: false
 
-  /@open-wc/lit-helpers/0.5.1_lit@2.4.1:
-    resolution: {integrity: sha512-r/PJpYueX2CX6R/20K+1P9jtMbf6g/O076qCpqh/o6XrThJahClpbxbr8lhu0tCWIQ/SNFvLtIOmIRR7qobwWg==}
-    peerDependencies:
-      lit: ^2.0.0
-    dependencies:
-      lit: 2.4.1
+  /@lit/reactive-element/1.4.2:
+    resolution: {integrity: sha512-VMOxsWh/QDwrxPsgkSQnuZ+8mfNy1OTjzzUdLBvvZtpahwPTHTeVZ51RZRqO4xfKVrR+btIPA8D01IL3xeG66w==}
     dev: false
 
   /@rometools/cli-darwin-arm64/10.0.1:

@@ -19,6 +19,6 @@
     "skipLibCheck": true,
     "target": "ES2020"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["lib/**/*.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "@keygate/ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -17,6 +17,7 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
+    "@lit/localize": "^0.11.4",
     "lit": "^2.4.0"
   },
   "peerDependencies": {
