@@ -1,14 +1,15 @@
+import { msg } from "@lit/localize";
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
 
-@customElement('keygate-ui-input')
-export class KeygateInput extends LitElement {
+@customElement('keygate-ui-auth-form')
+export class KeygateAuthForm extends LitElement {
 	render() {
 		return html`
-      <div class=input>
-        <input type="text" />
-      </div>
-    `;
+			<div>
+				<h2>${msg("Welcome back")}</h2>
+			</div>
+		`;
 	}
 
 	static styles = css`
@@ -23,6 +24,6 @@ export class KeygateInput extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"keygate-input": KeygateInput;
+		"keygate-ui-auth-form": KeygateAuthForm;
 	}
 }

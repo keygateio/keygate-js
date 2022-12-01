@@ -1,3 +1,5 @@
+@import url(https://fonts.bunny.net/css?family=inter:200,400,600);
+
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -15,6 +17,8 @@
   -webkit-text-size-adjust: 100%;
 
   --kg-theme-logo: none;
+  --kg-theme-font-header: "Inter";
+  --kg-theme-font-text: "Inter";
 
   --kg-theme-text-color: rgb(34, 34, 34);
   --kg-theme-label-text-color: rgb(36, 36, 36);
@@ -31,9 +35,10 @@
   --kg-theme-input-error-border-color: rgb(241, 0, 0);
 
   --kg-theme-dropshadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
-  --kg-theme-background: none;
-  --kg-theme-border-radius: 4px;
-  --kg-theme-modal-background: none;
+  --kg-theme-background: linear-gradient(#5b5757, #3a3a3c);
+  --kg-theme-border-radius: 18px;
+  --kg-theme-card-background: linear-gradient(#ffffff, #f1f1f3);
+  --kg-theme-card-border-radius: var(--kg-theme-border-radius);
 }
 
 @media (prefers-color-scheme: light) {

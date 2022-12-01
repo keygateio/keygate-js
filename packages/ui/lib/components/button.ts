@@ -1,8 +1,8 @@
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
 
-@customElement('keygate-ui-input')
-export class KeygateInput extends LitElement {
+@customElement('keygate-ui-button')
+export class KeygateButton extends LitElement {
 	render() {
 		return html`
       <div class=input>
@@ -23,6 +23,6 @@ export class KeygateInput extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"keygate-input": KeygateInput;
+		"keygate-ui-button": KeygateButton;
 	}
 }
