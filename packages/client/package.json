@@ -24,7 +24,7 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.11.10",
     "typescript": "^4.6.4",
     "vite": "^3.2.3"
   }

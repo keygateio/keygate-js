@@ -1,8 +1,5 @@
 {
   "name": "@keygate/core",
   "version": "1.0.0",
-  "dependencies": {
-    "idb-keyval": "^6.2.0",
-    "node-fetch": "^3.3.0"
-  }
+  "dependencies": {}
 }
