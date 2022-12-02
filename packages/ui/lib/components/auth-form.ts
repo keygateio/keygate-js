@@ -6,7 +6,8 @@ type Step = "login" | "login-password" | "register" | "register-password";
 
 @customElement('keygate-ui-auth-form')
 export class KeygateAuthForm extends LitElement {
-	@state() private _step: Step = "login";
+	@state() private _step: Step = "login-password";
+	#initialEmailValue = "";
 
 	render() {
 		let loginForm = html`
@@ -20,7 +21,13 @@ export class KeygateAuthForm extends LitElement {
 				loginForm = html`
 				<form @submit=${this.#onLoginSubmit}>
 					<h2>${msg("Welcome back")}</h2>
-					<keygate-ui-input required type="email" placeholder="${msg("Email address")}"></keygate-ui-input>
+					<keygate-ui-input
+						value=${this.#initialEmailValue}
+						submit
+						required
+						type="email"
+						placeholder="${msg("Email address")}"
+					></keygate-ui-input>
 					<keygate-ui-button type="submit">${msg("Continue")}</keygate-ui-button>
 					<p>
 						${msg("Don't have an account?")}
@@ -35,7 +42,7 @@ export class KeygateAuthForm extends LitElement {
 				loginForm = html`
 				<form @submit=${this.#onRegisterSubmit}>
 					<h2>${msg("Create your account")}</h2>
-					<keygate-ui-input required type="email" placeholder="${msg("Email address")}"></keygate-ui-input>
+					<keygate-ui-input submit required type="email" placeholder="${msg("Email address")}"></keygate-ui-input>
 					<keygate-ui-button type="submit">${msg("Continue")}</keygate-ui-button>
 					<p>
 						${msg("Already have an account?")}
@@ -49,7 +56,15 @@ export class KeygateAuthForm extends LitElement {
 			case "login-password": {
 				loginForm = html`
 				<form>
-					<h2>${msg("Welcome back")}</h2>
+					<h2>${msg("Enter your password")}</h2>
+					<keygate-ui-input readonly value="test@example.com" button=${msg("Edit")} @click=${this.#onEmailEdit} type="email"></keygate-ui-input>
+					<keygate-ui-input submit required type="password" placeholder="${msg("Password")}"></keygate-ui-input>
+					<a class="forget" href="#">${msg("Forget password?")}</a>
+					<keygate-ui-button type="submit">${msg("Continue")}</keygate-ui-button>
+					<p>
+						${msg("Don't have an account?")}
+						<a href="#" @click=${this.#switchPage("register")}>${msg("Sign up")}</a>
+					</p>
 				</form>`;
 				break;
 			}
@@ -60,6 +75,13 @@ export class KeygateAuthForm extends LitElement {
 					${loginForm}
 			</div>
 		`;
+	}
+
+	#onEmailEdit(e: Event) {
+		this.#initialEmailValue = (e.target as HTMLInputElement).value;
+		console.log(this.#initialEmailValue);
+
+		this._step = "login";
 	}
 
 	#switchPage(step: Step) {
@@ -113,6 +135,10 @@ export class KeygateAuthForm extends LitElement {
 
 		.form form > keygate-ui-hr {
 			margin-bottom: 2rem;
+		}
+
+		.form form > a.forget {
+			margin-bottom: 1rem;
 		}
   `;
 }

@@ -1,12 +1,30 @@
-import { css, html, LitElement } from "lit";
+import { css, html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { spread } from "@open-wc/lit-helpers";
 
 @customElement('keygate-ui-input')
 export class KeygateInput extends LitElement {
+	/**
+	 * Placeholder/label text for the input
+	 */
 	@property({ type: String })
 	placeholder = "";
+
+	@property({ type: Boolean })
+	readonly = false;
+
+	@property({ type: String })
+	button = "";
+
+	/**
+	 * Submit the form when the user presses enter
+	 */
+	@property({ type: Boolean })
+	submit = false;
+
+	@property({ type: String })
+	type: HTMLInputElement["type"] = "text";
 
 	_required = false;
 	@property({ type: Boolean })
@@ -18,13 +36,11 @@ export class KeygateInput extends LitElement {
 		this._internals.ariaRequired = isRequired ? "true" : "false";
 	}
 
-	@property({ type: String })
-	type: HTMLInputElement["type"] = "text";
-
 	@state()
 	private _filled = false;
 
 	#value = "";
+	@property({ type: String })
 	get value() {
 		return this.#value;
 	}
@@ -46,9 +62,13 @@ export class KeygateInput extends LitElement {
 		this.addEventListener("invalid", this.reportValidity);
 	}
 
-	connectedCallback() {
-		super.connectedCallback();
-		this._internals.setValidity({ valueMissing: true }, "Please fill out this field.");
+	firstUpdated() {
+		if (this.value !== "") {
+			this.#validate();
+			this._filled = true;
+		} else {
+			this._internals.setValidity({ valueMissing: true }, "Please fill out this field.");
+		}
 	}
 
 	render() {
@@ -56,36 +76,73 @@ export class KeygateInput extends LitElement {
 			placeholder: this.placeholder,
 			required: this.required,
 			type: this.type,
+			id: "input",
+			disabled: this.readonly ? true : undefined,
+			"aria-disabled": this.readonly ? "true" : "false",
+			value: this.value,
 		};
 
 		return html`
-      <div class=${classMap({ input: true, filled: this._filled })}>
-        <label for="input">${this.placeholder}</label>
-        <input type="email" @change=${this.#handleChange} id="input" type="text" ${spread(inputProperties)} />
+      <div class=${classMap({ input: true, filled: this.readonly ? true : this._filled })}>
+        ${this.placeholder ? html`<label for="input">${this.placeholder}</label>` : nothing}
+        <input
+          @keydown=${this.#onKeyDown}
+          @change=${this.#handleChange}
+          ${spread(inputProperties)}
+        />
+        ${this.button ? html`<button @click=${this.#onClick} class="button">${this.button}</button>` : nothing}
       </div>
     `;
+	}
+
+	#onClick(e: Event) {
+		const detail = { target: this };
+		const event = new CustomEvent("click", { detail, bubbles: true, composed: true, cancelable: true });
+		this.dispatchEvent(event);
+		if (event.defaultPrevented) e.preventDefault();
 	}
 
 	reportValidity() {
 		this.input.reportValidity();
 	}
 
-	#handleChange(event: InputEvent) {
-		const target = event!.target as HTMLInputElement;
-		this._filled = target.value.length > 0;
-		this.#value = target.value;
+	#onKeyDown(e: KeyboardEvent) {
+		if (this.submit && this._internals.form && e.key === "Enter") {
+			this.#validate();
+			this._internals.form?.requestSubmit();
+			this._internals.form?.reportValidity();
+		}
+	}
 
-		if (target.validity.valid) {
+	#handleChange() {
+		this.#value = this.input.value;
+		this._filled = this.input.value.length > 0;
+		this.#validate();
+		this._internals.setFormValue(this.#value);
+	}
+
+	#validate() {
+		if (this.input.validity.valid) {
 			this._internals.setValidity({});
 		} else {
-			this._internals.setValidity(target.validity, target.validationMessage);
+			this._internals.setValidity(this.input.validity, this.input.validationMessage);
 		}
-
-		this._internals.setFormValue(this.#value);
 	}
 
 	static styles = css`
     :host {
+    }
+
+    .input > button {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      padding: 1px 6px;
+      transform: translate(-15px, -50%);
+      color: var(--kg-theme-active-text-color);
+      background: none;
+      border: none;
+      cursor: pointer;
     }
 
     .input {
@@ -93,21 +150,14 @@ export class KeygateInput extends LitElement {
       display: flex;
     }
 
-    .input:has(input) {
-      margin-bottom: 1rem;
-    }
-
-    label:has(+ input)  {
-      opacity: 0;
-    }
-
     .input > label {
       position: absolute;
       top: 50%;
       padding: 1px 6px;
-      transform: translate(20px, -50%);
+      transform: translate(15px, -50%);
       transition: all 0.1s ease-in-out;
       color: var(--kg-theme-label-text-color);
+      pointer-events: none;
     }
 
     .input:focus-within > label, .input.filled > label {

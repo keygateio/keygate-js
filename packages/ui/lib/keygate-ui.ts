@@ -73,8 +73,6 @@ export class KeygateUI extends LitElement {
 	}
 
 	render() {
-		console.log(this.standalone);
-
 		if (this.standalone) {
 			return html`
         <keygate-ui-standalone>

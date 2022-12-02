@@ -93,8 +93,6 @@ export const createKeygateClient = <T extends StorageBackends>(
 	const channel = new Channel("__keygate__");
 
 	const needsFetch = typeof fetch === "undefined";
-	console.log(needsFetch);
-
 	let fetcher = !needsFetch && fetch;
 
 	class KeygateImplementation implements Keygate {
