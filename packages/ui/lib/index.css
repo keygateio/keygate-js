@@ -27,12 +27,15 @@
 
   --kg-theme-input-text-color: rgb(24, 24, 24);
   --kg-theme-input-border-color: rgb(104, 104, 104);
+  --kg-theme-input-border-radius: 5px;
+  --kg-theme-input-border: 1px solid var(--kg-theme-input-border-color);
+
   --kg-theme-input-background-color: rgb(255, 255, 255);
   --kg-theme-input-placeholder-color: rgb(165, 165, 165);
-  --kg-theme-input-focus-label-text-color: rgb(0, 162, 255);
-  --kg-theme-input-focus-border-color: rgb(0, 162, 255);
-  --kg-theme-input-error-label-text-color: rgb(241, 0, 0);
-  --kg-theme-input-error-border-color: rgb(241, 0, 0);
+  --kg-theme-input-focus-label-text-color: var(--kg-theme-active-text-color);
+  --kg-theme-input-focus-border-color: var(--kg-theme-active-text-color);
+  --kg-theme-input-invalid-label-text-color: rgb(241, 0, 0);
+  --kg-theme-input-invalid-border-color: rgb(241, 0, 0);
 
   --kg-theme-dropshadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
   --kg-theme-background: linear-gradient(#5b5757, #3a3a3c);

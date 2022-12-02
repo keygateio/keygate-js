@@ -4,9 +4,11 @@ import { customElement, property } from "lit/decorators.js";
 import { createKeygateClient, Keygate, KeygateOptions, StorageBackends } from "@keygate/client";
 
 import "./components/input.js";
+import "./components/button.js";
 import "./components/standalone.js";
 import "./components/card.js";
 import "./components/auth-form.js";
+import "./components/hr.js";
 
 class KeygateClientController<T extends StorageBackends> implements ReactiveController {
 	host: ReactiveControllerHost;

@@ -5,9 +5,9 @@ import { customElement } from "lit/decorators.js";
 export class KeygateButton extends LitElement {
 	render() {
 		return html`
-      <div class=input>
-        <input type="text" />
-      </div>
+      <button class="button">
+        <slot></slot>
+      </button>
     `;
 	}
 
@@ -15,8 +15,15 @@ export class KeygateButton extends LitElement {
     :host {
     }
 
-    .input {
-      color: var(--kg-theme-text-color);
+    .button {
+      position: relative;
+      display: flex;
+      padding: 1rem;
+      width: 100%;
+      justify-content: center;
+      font-size: 1rem;
+      
+      cursor: pointer;
     }
   `;
 }
