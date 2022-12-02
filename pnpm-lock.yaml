@@ -33,11 +33,15 @@ importers:
     specifiers:
       '@keygate/client': workspace:1.0.0
       '@lit/localize': ^0.11.4
+      '@open-wc/lit-helpers': ^0.5.1
+      element-internals-polyfill: ^1.1.16
       lit: ^2.4.1
       typescript: ^4.9.3
       vite: ^3.2.4
     dependencies:
       '@lit/localize': 0.11.4
+      '@open-wc/lit-helpers': 0.5.1_lit@2.4.1
+      element-internals-polyfill: 1.1.16
       lit: 2.4.1
     devDependencies:
       '@keygate/client': link:../client
@@ -73,6 +77,14 @@ packages:
 
   /@lit/reactive-element/1.4.2:
     resolution: {integrity: sha512-VMOxsWh/QDwrxPsgkSQnuZ+8mfNy1OTjzzUdLBvvZtpahwPTHTeVZ51RZRqO4xfKVrR+btIPA8D01IL3xeG66w==}
+    dev: false
+
+  /@open-wc/lit-helpers/0.5.1_lit@2.4.1:
+    resolution: {integrity: sha512-r/PJpYueX2CX6R/20K+1P9jtMbf6g/O076qCpqh/o6XrThJahClpbxbr8lhu0tCWIQ/SNFvLtIOmIRR7qobwWg==}
+    peerDependencies:
+      lit: ^2.0.0
+    dependencies:
+      lit: 2.4.1
     dev: false
 
   /@rometools/cli-darwin-arm64/10.0.1:
@@ -129,6 +141,10 @@ packages:
 
   /@types/trusted-types/2.0.2:
     resolution: {integrity: sha512-F5DIZ36YVLE+PN+Zwws4kJogq47hNgX3Nx6WyDJ3kcplxyke3XIzB8uK5n/Lpm1HBsbGzd6nmGehL8cPekP+Tg==}
+    dev: false
+
+  /element-internals-polyfill/1.1.16:
+    resolution: {integrity: sha512-dkH7+GgrFAXaAeNaYQXJjBhE7tLypRljnknkfDIkappmpIe61PPvyA3q7/QXtbhGWmCM9dfU4KZ1szU6Iu7x1A==}
     dev: false
 
   /esbuild-android-64/0.15.15:

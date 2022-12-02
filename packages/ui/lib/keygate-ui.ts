@@ -3,6 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 
 import { createKeygateClient, Keygate, KeygateOptions, StorageBackends } from "@keygate/client";
 
+import "element-internals-polyfill"; // This is a polyfill for the ElementInternals API
+
 import "./components/input.js";
 import "./components/button.js";
 import "./components/standalone.js";
