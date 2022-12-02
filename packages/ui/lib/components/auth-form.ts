@@ -2,7 +2,7 @@ import { msg } from "@lit/localize";
 import { css, html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-type Step = "login" | "login-password" | "register";
+type Step = "login" | "login-password" | "register" | "register-password";
 
 @customElement('keygate-ui-auth-form')
 export class KeygateAuthForm extends LitElement {
@@ -24,7 +24,22 @@ export class KeygateAuthForm extends LitElement {
 					<keygate-ui-button type="submit">${msg("Continue")}</keygate-ui-button>
 					<p>
 						${msg("Don't have an account?")}
-						<a href="/signup">${msg("Sign up")}</a>
+						<a href="#" @click=${this.#switchPage("register")}>${msg("Sign up")}</a>
+					</p>
+					<keygate-ui-hr label=${msg("or")}></keygate-ui-hr>
+					<keygate-ui-button variant="outline">${msg("Continue with Google")}</keygate-ui-button>
+				</form>`;
+				break;
+			}
+			case "register": {
+				loginForm = html`
+				<form @submit=${this.#onRegisterSubmit}>
+					<h2>${msg("Create your account")}</h2>
+					<keygate-ui-input required type="email" placeholder="${msg("Email address")}"></keygate-ui-input>
+					<keygate-ui-button type="submit">${msg("Continue")}</keygate-ui-button>
+					<p>
+						${msg("Already have an account?")}
+						<a href="#" @click=${this.#switchPage("login")}>${msg("Log in")}</a>
 					</p>
 					<keygate-ui-hr label=${msg("or")}></keygate-ui-hr>
 					<keygate-ui-button variant="outline">${msg("Continue with Google")}</keygate-ui-button>
@@ -47,11 +62,21 @@ export class KeygateAuthForm extends LitElement {
 		`;
 	}
 
-	#onLoginSubmit(e: Event) {
-		console.log("submit");
+	#switchPage(step: Step) {
+		return (e: Event) => {
+			e.preventDefault();
+			this._step = step;
+		};
+	}
 
+	#onLoginSubmit(e: Event) {
 		e.preventDefault();
 		this._step = "login-password";
+	}
+
+	#onRegisterSubmit(e: Event) {
+		e.preventDefault();
+		this._step = "register-password";
 	}
 
 	static styles = css`
