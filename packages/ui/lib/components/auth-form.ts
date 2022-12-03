@@ -2,23 +2,44 @@ import { msg } from "@lit/localize";
 import { css, html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-type Step = "login" | "login-password" | "register" | "register-password";
+type Step = "login" | "login-password" | "register" | "register-password" | "forgot-password";
 
 @customElement('keygate-ui-auth-form')
 export class KeygateAuthForm extends LitElement {
-	@state() private _step: Step = "login-password";
+	@state() private _step: Step = "login";
 	#initialEmailValue = "";
 
 	render() {
-		let loginForm = html`
+		let form = html`
 			<p>
 				${msg("An error occurred. Please try again.")}
 			</p>
 		`;
 
 		switch (this._step) {
+			case "forgot-password": {
+				form = html`
+					<form @submit=${this.#onForgetSubmit}>
+
+					<h2>${msg("Reset your password")}</h2>
+					<p>
+						${msg("Enter your email address and we'll send you a link to reset your password.")}
+					</p>
+					<keygate-ui-input
+						placeholder=${msg("Email address")}
+						type="email"
+					></keygate-ui-input>
+					<keygate-ui-button type="submit">${msg("Continue")}</keygate-ui-button>
+					<p>
+						<a href="#" @click=${this.#switchPage("login")}>
+							${msg("Back to login")}
+						</a>
+					</p>
+				`;
+				break;
+			}
 			case "login": {
-				loginForm = html`
+				form = html`
 				<form @submit=${this.#onLoginSubmit}>
 					<h2>${msg("Welcome back")}</h2>
 					<keygate-ui-input
@@ -39,7 +60,7 @@ export class KeygateAuthForm extends LitElement {
 				break;
 			}
 			case "register": {
-				loginForm = html`
+				form = html`
 				<form @submit=${this.#onRegisterSubmit}>
 					<h2>${msg("Create your account")}</h2>
 					<keygate-ui-input submit required type="email" placeholder="${msg("Email address")}"></keygate-ui-input>
@@ -54,7 +75,7 @@ export class KeygateAuthForm extends LitElement {
 				break;
 			}
 			case "login-password": {
-				loginForm = html`
+				form = html`
 				<form>
 					<h2>${msg("Enter your password")}</h2>
 					<keygate-ui-input readonly value="test@example.com" button=${msg("Edit")} @click=${this.#onEmailEdit} type="email"></keygate-ui-input>
@@ -72,9 +93,13 @@ export class KeygateAuthForm extends LitElement {
 
 		return html`
 			<div class="form">
-					${loginForm}
+					${form}
 			</div>
 		`;
+	}
+
+	#onForgetSubmit(e: Event) {
+		e.preventDefault();
 	}
 
 	#onEmailEdit(e: Event) {
@@ -107,7 +132,7 @@ export class KeygateAuthForm extends LitElement {
 
 		h1, h2, h3, h4, h5, h6 {
 			margin: 0;
-		}
+		}			
 
 		.form form > keygate-ui-input {
 			margin-bottom: 1rem;
@@ -123,6 +148,7 @@ export class KeygateAuthForm extends LitElement {
       color: var(--kg-theme-text-color);
 			display: flex;
 			flex-direction: column;
+			justify-content: space-between;
     }
 
 		.form form > h2 {

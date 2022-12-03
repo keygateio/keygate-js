@@ -2,6 +2,10 @@ import { css, html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { spread } from "@open-wc/lit-helpers";
+import { eye, eyeOff } from "../assets/svg";
+
+import "@lrnwebcomponents/simple-tooltip/simple-tooltip.js";
+import { msg } from "@lit/localize";
 
 @customElement('keygate-ui-input')
 export class KeygateInput extends LitElement {
@@ -52,6 +56,8 @@ export class KeygateInput extends LitElement {
 		return this.shadowRoot?.querySelector("input") as HTMLInputElement;
 	}
 
+	@state() private _visible = false;
+
 	// Identify the element as a form-associated custom element
 	static formAssociated = true;
 	_internals: ElementInternals;
@@ -72,15 +78,29 @@ export class KeygateInput extends LitElement {
 	}
 
 	render() {
+		let type = this.type;
+		if (this.type === "password") {
+			type = this._visible ? "text" : "password";
+		}
+
 		let inputProperties = {
-			placeholder: this.placeholder,
-			required: this.required,
-			type: this.type,
+			type,
 			id: "input",
+			value: this.value,
+			required: this.required,
+			placeholder: this.placeholder,
 			disabled: this.readonly ? true : undefined,
 			"aria-disabled": this.readonly ? "true" : "false",
-			value: this.value,
 		};
+
+		const visibilityIcon = html`
+			<button id="input-visibility" @click=${this.#togglePasswordVisibility} class="toggle">${
+			this._visible ? eyeOff : eye
+		}</button>
+			<simple-tooltip for="input-visibility" position="top" offset=0>
+				${this._visible ? msg("Hide password") : msg("Show password")}
+			</simple-tooltip>
+		`;
 
 		return html`
       <div class=${classMap({ input: true, filled: this.readonly ? true : this._filled })}>
@@ -91,8 +111,14 @@ export class KeygateInput extends LitElement {
           ${spread(inputProperties)}
         />
         ${this.button ? html`<button @click=${this.#onClick} class="button">${this.button}</button>` : nothing}
+				${this.type === "password" ? visibilityIcon : nothing}
+				
       </div>
     `;
+	}
+
+	#togglePasswordVisibility() {
+		this._visible = !this._visible;
 	}
 
 	#onClick(e: Event) {
@@ -131,9 +157,17 @@ export class KeygateInput extends LitElement {
 
 	static styles = css`
     :host {
+			--simple-tooltip-delay-in: 100ms;
+			--simple-tooltip-duration-out: 100ms;
+			--simple-tooltip-duration-in: 100ms;
     }
 
+		.input > button.toggle {
+			color: var(--kg-theme-input-text-color);
+		}
+
     .input > button {
+			display: flex;
       position: absolute;
       top: 50%;
       right: 0;

@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@lit/localize": "^0.11.4",
+    "@lrnwebcomponents/simple-tooltip": "^4.1.0",
     "@open-wc/lit-helpers": "^0.5.1",
     "element-internals-polyfill": "^1.1.16",
     "lit": "^2.4.1"
