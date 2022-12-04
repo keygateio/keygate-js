@@ -9,5 +9,11 @@ export default defineConfig({
 			name: "KeygateUI",
 			fileName: "keygate-ui",
 		},
+		rollupOptions: {
+			input: {
+				main: resolve(__dirname, "index.html"),
+				nested: resolve(__dirname, "demo-app/index.html"),
+			},
+		},
 	},
 });
