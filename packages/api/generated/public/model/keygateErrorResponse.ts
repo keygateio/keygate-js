@@ -4,6 +4,6 @@
  */
 
 export interface KeygateErrorResponse {
-  message: string;
-  status: number;
+	message: string;
+	status: number;
 }

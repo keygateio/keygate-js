@@ -4,5 +4,5 @@
  */
 
 export interface RefreshResponse {
-  access_token: string;
+	access_token: string;
 }

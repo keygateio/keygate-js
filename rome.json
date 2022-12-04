@@ -9,7 +9,8 @@
     "rules": {
       "style": {
         "useBlockStatements": "off",
-        "useSingleVarDeclarator": "off"
+        "useSingleVarDeclarator": "off",
+        "noUnusedTemplateLiteral": "off"
       }
     }
   }

@@ -5,6 +5,15 @@ let config = {
 			mode: "single",
 			target: "./generated/public/api.ts",
 			schemas: "./generated/public/model",
+			override: {
+				mutator: {
+					path: "./lib/fetcher.ts",
+					name: "customInstance",
+				},
+			},
+		},
+		hooks: {
+			afterAllFilesWrite: "rome format --write generated/public",
 		},
 	},
 	"keygate-admin-api": {
@@ -13,6 +22,15 @@ let config = {
 			mode: "single",
 			target: "./generated/admin/api.ts",
 			schemas: "./generated/admin/model",
+			override: {
+				mutator: {
+					path: "./lib/fetcher.ts",
+					name: "customInstance",
+				},
+			},
+		},
+		hooks: {
+			afterAllFilesWrite: "rome format --write generated/admin",
 		},
 	},
 };
