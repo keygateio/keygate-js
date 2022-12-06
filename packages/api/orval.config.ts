@@ -13,7 +13,7 @@ let config = {
 			},
 		},
 		hooks: {
-			afterAllFilesWrite: "rome format --write generated/public",
+			afterAllFilesWrite: "rome format --line-width 120 --write generated/public",
 		},
 	},
 	"keygate-admin-api": {
@@ -30,7 +30,7 @@ let config = {
 			},
 		},
 		hooks: {
-			afterAllFilesWrite: "rome format --write generated/admin",
+			afterAllFilesWrite: "rome format --line-width 120 --write generated/admin",
 		},
 	},
 };

@@ -2,6 +2,8 @@ import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { spread } from "@open-wc/lit-helpers";
 
+import { IElementInternals } from "element-internals-polyfill";
+
 @customElement('keygate-ui-button')
 export class KeygateButton extends LitElement {
 	@property ({ type: String })
@@ -9,7 +11,7 @@ export class KeygateButton extends LitElement {
 
 	// Identify the element as a form-associated custom element
 	static formAssociated = true;
-	_internals: ElementInternals;
+	_internals: IElementInternals;
 
 	constructor() {
 		super();

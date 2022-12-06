@@ -3,8 +3,7 @@
  * Do not edit manually.
  */
 
-export type LoginProcessStep =
-	typeof LoginProcessStep[keyof typeof LoginProcessStep];
+export type LoginProcessStep = typeof LoginProcessStep[keyof typeof LoginProcessStep];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const LoginProcessStep = {

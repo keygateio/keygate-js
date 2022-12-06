@@ -6,6 +6,7 @@ import { eye, eyeOff } from "../assets/svg";
 
 import "@lrnwebcomponents/simple-tooltip/simple-tooltip.js";
 import { msg } from "@lit/localize";
+import { IElementInternals } from "element-internals-polyfill";
 
 @customElement('keygate-ui-input')
 export class KeygateInput extends LitElement {
@@ -60,7 +61,7 @@ export class KeygateInput extends LitElement {
 
 	// Identify the element as a form-associated custom element
 	static formAssociated = true;
-	_internals: ElementInternals;
+	_internals: IElementInternals;
 
 	constructor() {
 		super();

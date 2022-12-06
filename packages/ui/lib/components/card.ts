@@ -32,6 +32,6 @@ export class KeygateCard extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"keygate-input": KeygateCard;
+		"keygate-ui-card": KeygateCard;
 	}
 }

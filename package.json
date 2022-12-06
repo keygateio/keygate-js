@@ -2,7 +2,11 @@
   "name": "keygate-js",
   "private": true,
   "license": "MIT",
+  "scripts": {
+    "build": "turbo run build  --include-dependencies"
+  },
   "devDependencies": {
-    "rome": "10.0.1"
+    "rome": "10.0.1",
+    "turbo": "^1.6.3"
   }
 }
