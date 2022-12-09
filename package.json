@@ -6,7 +6,7 @@
     "build": "turbo run build  --include-dependencies"
   },
   "devDependencies": {
-    "rome": "10.0.1",
+    "rome": "11.0.0",
     "turbo": "^1.6.3"
   }
 }

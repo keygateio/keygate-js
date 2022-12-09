@@ -1,20 +1,21 @@
-interface Opts {
+export interface Opts extends RequestInit {
 	url: string;
 	method: "get" | "post" | "put" | "delete" | "patch";
-	params?: any;
+	params?: Params;
 	data?: unknown;
 	responseType?: string;
 	headers?: Record<string, string>;
-	[key: string]: unknown;
 }
 
-interface KeygateOpts {
-	baseURL: string;
+type Params = string | Record<string, string> | URLSearchParams | string[][] | undefined;
+
+export interface FetcherOpts {
+	baseURL?: string;
 }
 
 export const customInstance = async <T>(
 	{ url, method, params, data, headers = {}, ...rest }: Opts,
-	keygateOpts?: KeygateOpts,
+	keygateOpts?: FetcherOpts,
 ): Promise<T> => {
 	let body: BodyInit | undefined;
 	if (typeof window !== "undefined" && (data instanceof URLSearchParams || data instanceof FormData)) {

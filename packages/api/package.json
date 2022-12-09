@@ -25,10 +25,10 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^18.11.10",
+    "@types/node": "^18.11.12",
     "openapi-types": "^12.0.2",
     "orval": "^6.10.3",
-    "typescript": "^4.6.4",
-    "vite": "^3.2.3"
+    "typescript": "^4.9.4",
+    "vite": "^4.0.0"
   }
 }
