@@ -1,7 +1,5 @@
-import { LitElement, ReactiveController, css, html, ReactiveControllerHost } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-
-import { createKeygateClient, Keygate, KeygateOptions, StorageBackends } from "@keygate/client";
 
 import "element-internals-polyfill"; // This is a polyfill for the ElementInternals API
 
@@ -12,62 +10,25 @@ import "./components/card.js";
 import "./components/auth-form.js";
 import "./components/hr.js";
 
-class KeygateClientController<T extends StorageBackends> implements ReactiveController {
-	host: ReactiveControllerHost;
-	clientReady = false;
-	client?: Keygate;
-
-	constructor(host: ReactiveControllerHost, customClient: boolean, initialOptions: Partial<KeygateOptions<T>>) {
-		(this.host = host).addController(this);
-
-		if (customClient) return;
-
-		if (!(initialOptions?.apiKey && initialOptions.domain && initialOptions?.apiURL)) {
-			throw new Error("KeygateClientController: options not set");
-		}
-
-		let options: KeygateOptions<T> = {
-			domain: initialOptions.domain,
-			apiKey: initialOptions.apiKey,
-			apiURL: initialOptions.apiURL,
-			mode: initialOptions.mode,
-			storageBackend: initialOptions.storageBackend,
-		};
-
-		let clientPromise = createKeygateClient(options);
-		if (clientPromise instanceof Promise) {
-			clientPromise.then((client) => {
-				this.client = client;
-				this.clientReady = true;
-			});
-		} else {
-			this.client = clientPromise;
-			this.clientReady = true;
-		}
-	}
-
-	hostConnected() {}
-}
+import { consumeKeygateContext, KeygateContext } from "./context.js";
 
 @customElement('keygate-ui')
 export class KeygateUI extends LitElement {
-	#keygate = new KeygateClientController(this, !!this.attributes.getNamedItem("custom-client"), {
-		domain: this.attributes.getNamedItem("domain")?.value,
-		apiKey: this.attributes.getNamedItem("api-key")?.value,
-		apiURL: this.attributes.getNamedItem("api-url")?.value,
-	});
+	@consumeKeygateContext()
+  @property({attribute: false})
+	public context?: KeygateContext;
 
-	@property({ type: Boolean, attribute: "custom-client" }) customClient: boolean = false;
-	@property({ type: String, attribute: "domain" }) domain?: string;
-	@property({ type: String, attribute: "api-key" }) apiKey?: string;
-	@property({ type: String, attribute: 'api-url' }) apiURL?: string;
-
-	@property({ type: Boolean })
-	standalone = false;
+	@property({ type: Boolean }) standalone = false;
 
 	firstUpdated() {
-		console.log("client", this.#keygate.client);
-		this.#keygate.client?.authedFetch("https://accounts.keygate.dev/api/v1/users/me").then((res) => {
+		if (!this.context) {
+			throw new Error(
+				"KeygateUI: context not set. Did you forget to wrap the component in a <keygate-context-provider> element?",
+			);
+		}
+
+		console.log("client", this.context?.client);
+		this.context?.client?.authedFetch("https://accounts.keygate.dev/api/v1/users/me").then((res) => {
 			console.log("res", res);
 		});
 	}

@@ -3,7 +3,7 @@ import { FetcherOpts } from "./fetcher";
 // import * as adminAPI from "./../generated/admin/api";
 
 const adminAPI = {
-	getAdmin: (opts: FetcherOpts): Promise<unknown> => {
+	getAdmin: (_opts: FetcherOpts): Promise<unknown> => {
 		return Promise.resolve({});
 	},
 };

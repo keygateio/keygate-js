@@ -12,27 +12,27 @@ importers:
 
   packages/api:
     specifiers:
-      '@types/node': ^18.11.12
-      openapi-types: ^12.0.2
+      '@types/node': ^18.11.13
+      openapi-types: ^12.1.0
       orval: ^6.10.3
       typescript: ^4.9.4
       vite: ^4.0.0
     devDependencies:
-      '@types/node': 18.11.12
-      openapi-types: 12.0.2
-      orval: 6.10.3_igdub2yvzfucmdgbrfwrs2okuq
+      '@types/node': 18.11.13
+      openapi-types: 12.1.0
+      orval: 6.10.3_zkwotomts6h5nulovvchyf7t5q
       typescript: 4.9.4
-      vite: 4.0.0_@types+node@18.11.12
+      vite: 4.0.0_@types+node@18.11.13
 
   packages/client:
     specifiers:
-      '@types/node': ^18.11.12
+      '@types/node': ^18.11.13
       typescript: ^4.9.4
       vite: ^4.0.0
     devDependencies:
-      '@types/node': 18.11.12
+      '@types/node': 18.11.13
       typescript: 4.9.4
-      vite: 4.0.0_@types+node@18.11.12
+      vite: 4.0.0_@types+node@18.11.13
 
   packages/react:
     specifiers:
@@ -53,7 +53,7 @@ importers:
       '@lit/localize': ^0.11.4
       '@lrnwebcomponents/simple-tooltip': ^4.1.0
       '@open-wc/lit-helpers': ^0.5.1
-      element-internals-polyfill: ^1.1.16
+      element-internals-polyfill: ^1.1.17
       lit: ^2.5.0
       typescript: ^4.9.4
       vite: ^4.0.0
@@ -63,7 +63,7 @@ importers:
       '@lit/localize': 0.11.4
       '@lrnwebcomponents/simple-tooltip': 4.1.0
       '@open-wc/lit-helpers': 0.5.1_lit@2.5.0
-      element-internals-polyfill: 1.1.16
+      element-internals-polyfill: 1.1.17
       lit: 2.5.0
     devDependencies:
       '@keygate/client': link:../client
@@ -89,7 +89,7 @@ packages:
     resolution: {integrity: sha512-QAkD5kK2b1WfjDS/UQn/qQkbwF31uqRjPTrsCs5ZG9BQGAkjwvqGFjjPqAuzac/IYzpPtRzjCP1WrTuAIjMrXg==}
     dev: true
 
-  /@apidevtools/swagger-parser/10.1.0_openapi-types@12.0.2:
+  /@apidevtools/swagger-parser/10.1.0_openapi-types@12.1.0:
     resolution: {integrity: sha512-9Kt7EuS/7WbMAUv2gSziqjvxwDbFSg3Xeyfuj5laUODX8o/k/CpsAKiQ8W7/R88eXFTMbJYg6+7uAmOWNKmwnw==}
     peerDependencies:
       openapi-types: '>=7'
@@ -101,7 +101,7 @@ packages:
       ajv: 8.11.2
       ajv-draft-04: 1.0.0_ajv@8.11.2
       call-me-maybe: 1.0.2
-      openapi-types: 12.0.2
+      openapi-types: 12.1.0
     dev: true
 
   /@asyncapi/specs/3.2.1:
@@ -690,7 +690,7 @@ packages:
       '@stoplight/spectral-rulesets': 1.14.1
       '@stoplight/spectral-runtime': 1.1.2
       '@stoplight/types': 13.8.0
-      '@types/node': 18.11.12
+      '@types/node': 18.11.13
       pony-cause: 1.1.1
       rollup: 2.79.1
       tslib: 2.4.1
@@ -710,7 +710,7 @@ packages:
       '@stoplight/spectral-runtime': 1.1.2
       '@stoplight/types': 13.8.0
       '@stoplight/yaml': 4.2.3
-      '@types/node': 18.11.12
+      '@types/node': 18.11.13
       ajv: 8.11.2
       ast-types: 0.14.2
       astring: 1.8.3
@@ -804,7 +804,7 @@ packages:
   /@types/es-aggregate-error/1.0.2:
     resolution: {integrity: sha512-erqUpFXksaeR2kejKnhnjZjbFxUpGZx4Z7ydNL9ie8tEhXPiZTsLeUDJ6aR1F8j5wWUAtOAQWUqkc7givBJbBA==}
     dependencies:
-      '@types/node': 18.11.12
+      '@types/node': 18.11.13
     dev: true
 
   /@types/estree/0.0.39:
@@ -819,8 +819,8 @@ packages:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
 
-  /@types/node/18.11.12:
-    resolution: {integrity: sha512-FgD3NtTAKvyMmD44T07zz2fEf+OKwutgBCEVM8GcvMGVGaDktiLNTDvPwC/LUe3PinMW+X6CuLOF2Ui1mAlSXg==}
+  /@types/node/18.11.13:
+    resolution: {integrity: sha512-IASpMGVcWpUsx5xBOrxMj7Bl8lqfuTY7FKAnPmu5cHkfQVWF8GulWS1jbRqA934qZL35xh5xN/+Xe/i26Bod4w==}
     dev: true
 
   /@types/trusted-types/2.0.2:
@@ -1221,8 +1221,8 @@ packages:
       path-type: 4.0.0
     dev: true
 
-  /element-internals-polyfill/1.1.16:
-    resolution: {integrity: sha512-dkH7+GgrFAXaAeNaYQXJjBhE7tLypRljnknkfDIkappmpIe61PPvyA3q7/QXtbhGWmCM9dfU4KZ1szU6Iu7x1A==}
+  /element-internals-polyfill/1.1.17:
+    resolution: {integrity: sha512-sMDJyJiwvcHB6wLnyG+y/9FRxi/9OyI8bmjyw18K6b5iVlBjmA5CJVTFz4K2I7R53yqevK8WkTrfBmSHJXH9Rw==}
     dev: false
 
   /emoji-regex/8.0.0:
@@ -2515,8 +2515,8 @@ packages:
       format-util: 1.0.5
     dev: true
 
-  /openapi-types/12.0.2:
-    resolution: {integrity: sha512-GuTo7FyZjOIWVhIhQSWJVaws6A82sWIGyQogxxYBYKZ0NBdyP2CYSIgOwFfSB+UVoPExk/YzFpyYitHS8KVZtA==}
+  /openapi-types/12.1.0:
+    resolution: {integrity: sha512-XpeCy01X6L5EpP+6Hc3jWN7rMZJ+/k1lwki/kTmWzbVhdPie3jd5O2ZtedEx8Yp58icJ0osVldLMrTB/zslQXA==}
     dev: true
 
   /openapi3-ts/3.1.2:
@@ -2552,11 +2552,11 @@ packages:
       wcwidth: 1.0.1
     dev: true
 
-  /orval/6.10.3_igdub2yvzfucmdgbrfwrs2okuq:
+  /orval/6.10.3_zkwotomts6h5nulovvchyf7t5q:
     resolution: {integrity: sha512-gct7wGGacGIj3cRKqfioRK2/TRDAK11LbpghRgTMeNWWF+JBCyZGA8H9ehhfdCOuhXIb4me61aNphiusrlz7jQ==}
     hasBin: true
     dependencies:
-      '@apidevtools/swagger-parser': 10.1.0_openapi-types@12.0.2
+      '@apidevtools/swagger-parser': 10.1.0_openapi-types@12.1.0
       acorn: 8.8.1
       cac: 6.7.14
       chalk: 4.1.2
@@ -3395,7 +3395,7 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vite/4.0.0_@types+node@18.11.12:
+  /vite/4.0.0_@types+node@18.11.13:
     resolution: {integrity: sha512-ynad+4kYs8Jcnn8J7SacS9vAbk7eMy0xWg6E7bAhS1s79TK+D7tVFGXVZ55S7RNLRROU1rxoKlvZ/qjaB41DGA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -3420,7 +3420,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.11.12
+      '@types/node': 18.11.13
       esbuild: 0.16.3
       postcss: 8.4.19
       resolve: 1.22.1
