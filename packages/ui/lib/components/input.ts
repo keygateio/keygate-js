@@ -16,6 +16,9 @@ export class KeygateInput extends LitElement {
 	@property({ type: String })
 	placeholder = "";
 
+	@property({ type: String, reflect: true })
+	name = "";
+
 	@property({ type: Boolean })
 	readonly = false;
 
@@ -70,6 +73,8 @@ export class KeygateInput extends LitElement {
 	}
 
 	firstUpdated() {
+		this._internals.setFormValue(this.value);
+
 		if (this.value !== "") {
 			this.#validate();
 			this._filled = true;
@@ -108,6 +113,7 @@ export class KeygateInput extends LitElement {
         ${this.placeholder ? html`<label for="input">${this.placeholder}</label>` : nothing}
         <input
           @keydown=${this.#onKeyDown}
+					@input=${this.#handleInput}
           @change=${this.#handleChange}
           ${spread(inputProperties)}
         />
@@ -141,11 +147,13 @@ export class KeygateInput extends LitElement {
 		}
 	}
 
-	#handleChange() {
-		this.#value = this.input.value;
-		this._filled = this.input.value.length > 0;
-		this.#validate();
+	#handleInput(e: InputEvent) {
+		this.#value = (e.target as HTMLInputElement).value;
 		this._internals.setFormValue(this.#value);
+	}
+
+	#handleChange() {
+		this._filled = this.input.value.length > 0;
 	}
 
 	#validate() {

@@ -10,7 +10,7 @@
       "require": "./dist/keygate-api.umd.cjs"
     }
   },
-  "types": "types/main.d.ts",
+  "types": "types/lib/main.d.ts",
   "scripts": {
     "dev": "vite",
     "generate": "orval",

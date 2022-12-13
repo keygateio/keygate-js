@@ -8,11 +8,14 @@ const adminAPI = {
 	},
 };
 
+export type PublicAPI = typeof publicAPI;
+export type AdminAPI = typeof adminAPI;
+
 type KeygateAPIOptions = {
 	baseURL: string;
 };
 
-type API = typeof publicAPI | typeof adminAPI;
+type API = PublicAPI | typeof adminAPI;
 
 const createAPIWrapper = <T extends API>(api: T) => {
 	type KeygateAPI = { -readonly [K in keyof T]: T[K] };
@@ -20,15 +23,28 @@ const createAPIWrapper = <T extends API>(api: T) => {
 	function createKeygateAPI(opts: KeygateAPIOptions) {
 		const keygateAPI = {} as KeygateAPI;
 
+		const override = {
+			baseURL: opts.baseURL,
+		};
+
 		for (const [key, value] of Object.entries(api)) {
 			if (typeof value === "function") {
 				let _key = key as keyof T;
 
 				keygateAPI[_key] = ((...args: unknown[]) => {
-					let options = args[args.length - 1] as FetcherOpts;
-					let allArgs = [...args.slice(0, args.length - 1), { baseURL: opts.baseURL, ...options }];
+					// If the function only takes one argument, it's the options
+					if (value.length === 1) {
+						return value({ ...override, ...(args[0] as FetcherOpts) });
+					}
 
-					return value(...(allArgs as Parameters<typeof value>));
+					if (args.length > 1) {
+						return value(...(args.slice(0, args.length - 1) as Parameters<typeof value>), {
+							...override,
+							...(args[args.length - 1] as FetcherOpts),
+						});
+					}
+
+					return value(...(args as Parameters<typeof value>), override);
 				}) as T[typeof _key];
 			}
 		}

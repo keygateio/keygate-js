@@ -15,13 +15,13 @@
     </style>
   </head>
   <body>
-    <keygate-ui
-      standalone
+    <keygate-context-provider
       domain="test"
       api-key="test"
       api-url="https://accounts.example.com/api/v1"
     >
-    </keygate-ui>
+      <keygate-ui standalone> </keygate-ui>
+    </keygate-context-provider>
 
     <script type="module" src="./lib/keygate-ui.ts"></script>
   </body>

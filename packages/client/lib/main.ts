@@ -1,5 +1,7 @@
-import { createTokenKeeper } from "./tokens";
+import { createPublicAPI } from "@keygate/api";
+import type { PublicAPI } from "@keygate/api";
 
+import { createTokenKeeper } from "./tokens";
 import { Channel } from "./channel";
 
 // XSS
@@ -59,7 +61,11 @@ export type KeygateOptions<T extends StorageBackends> = {
 	secureStorage?: Storage;
 };
 
+type DeviceID = string;
+
 export interface Keygate {
+	api: PublicAPI;
+	deviceID: DeviceID;
 	fetch: typeof fetch;
 	authedFetch: typeof fetch;
 	logout: () => Promise<void>;
@@ -96,6 +102,14 @@ export const createKeygateClient = <T extends StorageBackends>(
 	let fetcher = !needsFetch && fetch;
 
 	class KeygateImplementation implements Keygate {
+		api = createPublicAPI({
+			baseURL: options.apiURL,
+		});
+
+		get deviceID() {
+			return "placeholder";
+		}
+
 		constructor() {
 			if (!allowConstruct) {
 				throw new Error("Keygate can't be constructed");
@@ -168,8 +182,10 @@ export const createKeygateClient = <T extends StorageBackends>(
 	}
 
 	if (promise) {
+		// rome-ignore lint/suspicious/noExplicitAny: typescript is not smart enough to infer this
 		return promise.then(() => new KeygateImplementation()) as any;
 	}
 
+	// rome-ignore lint/suspicious/noExplicitAny: typescript is not smart enough to infer this
 	return new KeygateImplementation() as any;
 };

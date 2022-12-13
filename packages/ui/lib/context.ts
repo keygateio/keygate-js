@@ -7,10 +7,15 @@ import { consume as contextConsume } from "@lit-labs/context";
 
 export const consumeKeygateContext = () => contextConsume({ context: keygateContext, subscribe: true });
 
-export interface KeygateContext {
-	client?: Keygate;
-	clientReady: boolean;
-}
+export type KeygateContext =
+	| {
+			client?: Keygate;
+			clientReady: false;
+	  }
+	| {
+			client: Keygate;
+			clientReady: true;
+	  };
 
 export const keygateContext = createContext<KeygateContext>("keygate");
 
