@@ -28,9 +28,6 @@ export class KeygateUI extends LitElement {
 		}
 
 		console.log("client", this.context?.client);
-		this.context?.client?.authedFetch("https://accounts.keygate.dev/api/v1/users/me").then((res) => {
-			console.log("res", res);
-		});
 	}
 
 	render() {

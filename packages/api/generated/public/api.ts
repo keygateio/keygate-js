@@ -14,7 +14,7 @@ export const createLoginProcess = (
 ) => {
 	return customInstance<LoginProcessResponse>(
 		{
-			url: `/api/v1/login/`,
+			url: `/api/v1/process/login`,
 			method: "post",
 			headers: { "Content-Type": "application/json" },
 			data: loginProcessRequest,
@@ -24,7 +24,7 @@ export const createLoginProcess = (
 };
 
 export const refresh = (options?: SecondParameter<typeof customInstance>) => {
-	return customInstance<RefreshResponse>({ url: `/api/v1/session/refresh`, method: "post" }, options);
+	return customInstance<RefreshResponse>({ url: `/api/v1/session/refresh/refresh`, method: "post" }, options);
 };
 
 export type CreateLoginProcessResult = NonNullable<Awaited<ReturnType<typeof createLoginProcess>>>;

@@ -3,7 +3,10 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "turbo run build  --include-dependencies"
+    "build": "turbo run build  --include-dependencies",
+    "generate": "pnpm run --filter api generate",
+    "client": "pnpm run --filter client dev",
+    "ui": "pnpm run --filter ui dev"
   },
   "devDependencies": {
     "rome": "11.0.0",
