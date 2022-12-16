@@ -1,5 +1,5 @@
 import { css, html, LitElement, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { spread } from "@open-wc/lit-helpers";
 import { eye, eyeOff } from "../assets/svg";
@@ -56,9 +56,8 @@ export class KeygateInput extends LitElement {
 		this.#value = v;
 	}
 
-	get input(): HTMLInputElement {
-		return this.shadowRoot?.querySelector("input") as HTMLInputElement;
-	}
+	@query("input")
+	input!: HTMLInputElement;
 
 	@state() private _visible = false;
 

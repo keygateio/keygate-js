@@ -7,7 +7,7 @@ import "./components/input.js";
 import "./components/button.js";
 import "./components/standalone.js";
 import "./components/card.js";
-import "./components/auth-form.js";
+import "./components/form";
 import "./components/hr.js";
 
 import { consumeKeygateContext, KeygateContext } from "./context.js";

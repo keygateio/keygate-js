@@ -1,7 +1,7 @@
 import { createKeygateClient, Keygate, KeygateOptions, StorageBackends } from "@keygate/client";
 import { createContext, provide } from "@lit-labs/context";
 import { html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 
 import { consume as contextConsume } from "@lit-labs/context";
 
@@ -73,3 +73,30 @@ declare global {
 		"keygate-context-provider": KeygateContextProvider<StorageBackends>;
 	}
 }
+
+export declare class ClientMixinInterface {
+	client: Keygate;
+	clientReady: boolean;
+}
+
+// rome-ignore lint/suspicious/noExplicitAny: this is fine
+type Constructor<T = {}> = new (...args: any[]) => T;
+export const ClientMixin = <T extends Constructor<LitElement>>(superClass: T) => {
+	class ClientMixin extends superClass {
+		@consumeKeygateContext()
+		@property({attribute: false})
+		_context?: KeygateContext;
+
+		@state()
+		get clientReady() {
+			return this._context?.clientReady;
+		}
+
+		get client() {
+			if (!this?._context?.clientReady) throw new Error("KeygateClientController: client not ready");
+			return this._context.client;
+		}
+	}
+
+	return ClientMixin as Constructor<ClientMixinInterface> & T;
+};
