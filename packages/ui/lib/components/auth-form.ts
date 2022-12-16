@@ -18,8 +18,7 @@ export class KeygateAuthForm extends LitElement {
 	}
 
 	@state() private _step: Step = "login";
-	#initialEmailValue = "";
-
+	@state() private _email = "";
 	@state() private _loading = false;
 
 	render() {
@@ -65,7 +64,7 @@ export class KeygateAuthForm extends LitElement {
 					<h2>${msg("Welcome back")}</h2>
 					<keygate-ui-input
 						name="email"
-						value=${this.#initialEmailValue}
+						value=${this._email}
 						submit
 						required
 						type="email"
@@ -100,7 +99,7 @@ export class KeygateAuthForm extends LitElement {
 				form = html`
 				<form>
 					<h2>${msg("Enter your password")}</h2>
-					<keygate-ui-input readonly value="test@example.com" button=${msg("Edit")} @click=${this.#onEmailEdit} type="email"></keygate-ui-input>
+					<keygate-ui-input readonly value=${this._email} button=${msg("Edit")} @click=${this.#onEmailEdit} type="email"></keygate-ui-input>
 					<keygate-ui-input submit required type="password" placeholder="${msg("Password")}"></keygate-ui-input>
 					<a class="forget" href="#" @click=${this.#onForget}>${msg("Forget password?")}</a>
 					<keygate-ui-button type="submit">${msg("Continue")}</keygate-ui-button>
@@ -130,7 +129,7 @@ export class KeygateAuthForm extends LitElement {
 	}
 
 	#onEmailEdit(e: Event) {
-		this.#initialEmailValue = (e.target as HTMLInputElement).value;
+		this._email = (e.target as HTMLInputElement).value;
 		this._step = "login";
 	}
 
@@ -144,14 +143,13 @@ export class KeygateAuthForm extends LitElement {
 	#onLoginSubmit(e: Event) {
 		e.preventDefault();
 
-		var formData = new FormData(e.target as HTMLFormElement);
-		let username_or_email = formData.get("email") as string;
-		console.log(formData);
+		const formData = new FormData(e.target as HTMLFormElement);
+		this._email = formData.get("email") as string;
 
 		this.#client.api
 			.createLoginProcess({
 				device_id: this.#client.deviceID,
-				username_or_email,
+				username_or_email: this._email,
 			})
 			.then((res) => {
 				console.log(res);

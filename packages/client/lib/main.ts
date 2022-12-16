@@ -4,6 +4,9 @@ import type { PublicAPI } from "@keygate/api";
 import { createTokenKeeper } from "./tokens";
 import { Channel } from "./channel";
 
+import { urlAlphabet, customAlphabet } from "nanoid";
+const nanoid = customAlphabet(urlAlphabet);
+
 // XSS
 // Let's get this over with.
 // XSS is a security vulnerability that allows an attacker to inject malicious code into a website.
@@ -106,8 +109,27 @@ export const createKeygateClient = <T extends StorageBackends>(
 			baseURL: options.apiURL,
 		});
 
+		#deviceID: DeviceID | undefined;
 		get deviceID() {
-			return "placeholder";
+			if (!(sessionStorage || this.#deviceID))
+				console.warn("persistent deviceIDs are currently not supported in contexts without sessionStorage");
+
+			if (this.#deviceID) {
+				return this.#deviceID;
+			}
+
+			if (sessionStorage) {
+				this.#deviceID = sessionStorage.getItem("kg-device-id") as DeviceID;
+			}
+
+			if (!this.#deviceID) {
+				this.#deviceID = nanoid();
+				sessionStorage.setItem("kg-device-id", this.#deviceID);
+			}
+
+			console.log("deviceID", this.#deviceID);
+
+			return this.#deviceID as DeviceID;
 		}
 
 		constructor() {

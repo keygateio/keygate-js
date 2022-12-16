@@ -2,6 +2,7 @@
 
 import { defineConfig } from "vite";
 import { resolve } from "node:path";
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig(({ mode }) => {
 	const input =
@@ -13,7 +14,9 @@ export default defineConfig(({ mode }) => {
 			: "index.html";
 
 	return {
+		plugins: [process.env.VISUALIZE && visualizer()],
 		build: {
+			minify: true,
 			lib: {
 				entry: resolve(__dirname, "lib/keygate-ui.ts"),
 				name: "KeygateUI",

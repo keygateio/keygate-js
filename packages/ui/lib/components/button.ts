@@ -19,9 +19,11 @@ export class KeygateButton extends LitElement {
 	}
 
 	#onClick() {
+		console.log("click");
+
 		if (this.type === "submit") {
+			if (!this._internals.form?.reportValidity()) return;
 			this._internals.form?.requestSubmit();
-			this._internals.form?.reportValidity();
 		}
 	}
 

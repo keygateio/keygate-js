@@ -5,8 +5,8 @@ import { spread } from "@open-wc/lit-helpers";
 import { eye, eyeOff } from "../assets/svg";
 
 import "@lrnwebcomponents/simple-tooltip/simple-tooltip.js";
+import type { IElementInternals } from "element-internals-polyfill";
 import { msg } from "@lit/localize";
-import { IElementInternals } from "element-internals-polyfill";
 
 @customElement('keygate-ui-input')
 export class KeygateInput extends LitElement {
@@ -104,7 +104,7 @@ export class KeygateInput extends LitElement {
 			this._visible ? eyeOff : eye
 		}</button>
 			<simple-tooltip for="input-visibility" position="top" offset=0>
-				${this._visible ? msg("Hide password") : msg("Show password")}
+			${this._visible ? msg("Hide password") : msg("Show password")}
 			</simple-tooltip>
 		`;
 
@@ -150,6 +150,7 @@ export class KeygateInput extends LitElement {
 	#handleInput(e: InputEvent) {
 		this.#value = (e.target as HTMLInputElement).value;
 		this._internals.setFormValue(this.#value);
+		this.#validate();
 	}
 
 	#handleChange() {
