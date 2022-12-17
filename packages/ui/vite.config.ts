@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
 		plugins: [process.env.VISUALIZE && visualizer()],
 		build: {
 			minify: true,
-			lib: {
+			lib: !process.env.PREVIEW && {
 				entry: resolve(__dirname, "lib/keygate-ui.ts"),
 				name: "KeygateUI",
 				fileName: "keygate-ui",

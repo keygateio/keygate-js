@@ -12,34 +12,34 @@ importers:
 
   packages/api:
     specifiers:
-      '@types/node': ^18.11.15
+      '@types/node': ^18.11.16
       openapi-types: ^12.1.0
       orval: ^6.10.3
       typescript: ^4.9.4
       vite: ^4.0.1
     devDependencies:
-      '@types/node': 18.11.15
+      '@types/node': 18.11.16
       openapi-types: 12.1.0
       orval: 6.10.3_zkwotomts6h5nulovvchyf7t5q
       typescript: 4.9.4
-      vite: 4.0.1_@types+node@18.11.15
+      vite: 4.0.1_@types+node@18.11.16
 
   packages/client:
     specifiers:
       '@keygate/api': workspace:*
-      '@types/node': ^18.11.15
+      '@types/node': ^18.11.16
       '@types/uuid': ^9.0.0
       nanoid: ^4.0.0
       typescript: ^4.9.4
       vite: ^4.0.1
     dependencies:
-      '@keygate/api': link:../api
       '@types/uuid': 9.0.0
       nanoid: 4.0.0
     devDependencies:
-      '@types/node': 18.11.15
+      '@keygate/api': link:../api
+      '@types/node': 18.11.16
       typescript: 4.9.4
-      vite: 4.0.1_@types+node@18.11.15
+      vite: 4.0.1_@types+node@18.11.16
 
   packages/react:
     specifiers:
@@ -54,7 +54,8 @@ importers:
 
   packages/ui:
     specifiers:
-      '@keygate/client': workspace:1.0.0
+      '@keygate/api': workspace:^1.0.0
+      '@keygate/client': workspace:^1.0.0
       '@lit-labs/context': ^0.2.0
       '@lit-labs/task': ^2.0.0
       '@lit/localize': ^0.11.4
@@ -74,6 +75,7 @@ importers:
       element-internals-polyfill: 1.1.17
       lit: 2.5.0
     devDependencies:
+      '@keygate/api': link:../api
       '@keygate/client': link:../client
       rollup-plugin-visualizer: 5.8.3
       typescript: 4.9.4
@@ -699,7 +701,7 @@ packages:
       '@stoplight/spectral-rulesets': 1.14.1
       '@stoplight/spectral-runtime': 1.1.2
       '@stoplight/types': 13.8.0
-      '@types/node': 18.11.15
+      '@types/node': 18.11.16
       pony-cause: 1.1.1
       rollup: 2.79.1
       tslib: 2.4.1
@@ -719,7 +721,7 @@ packages:
       '@stoplight/spectral-runtime': 1.1.2
       '@stoplight/types': 13.8.0
       '@stoplight/yaml': 4.2.3
-      '@types/node': 18.11.15
+      '@types/node': 18.11.16
       ajv: 8.11.2
       ast-types: 0.14.2
       astring: 1.8.3
@@ -813,7 +815,7 @@ packages:
   /@types/es-aggregate-error/1.0.2:
     resolution: {integrity: sha512-erqUpFXksaeR2kejKnhnjZjbFxUpGZx4Z7ydNL9ie8tEhXPiZTsLeUDJ6aR1F8j5wWUAtOAQWUqkc7givBJbBA==}
     dependencies:
-      '@types/node': 18.11.15
+      '@types/node': 18.11.16
     dev: true
 
   /@types/estree/0.0.39:
@@ -828,8 +830,8 @@ packages:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
 
-  /@types/node/18.11.15:
-    resolution: {integrity: sha512-VkhBbVo2+2oozlkdHXLrb3zjsRkpdnaU2bXmX8Wgle3PUi569eLRaHGlgETQHR7lLL1w7GiG3h9SnePhxNDecw==}
+  /@types/node/18.11.16:
+    resolution: {integrity: sha512-6T7P5bDkRhqRxrQtwj7vru+bWTpelgtcETAZEUSdq0YISKz8WKdoBukQLYQQ6DFHvU9JRsbFq0JH5C51X2ZdnA==}
     dev: true
 
   /@types/trusted-types/2.0.2:
@@ -3461,7 +3463,7 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vite/4.0.1_@types+node@18.11.15:
+  /vite/4.0.1_@types+node@18.11.16:
     resolution: {integrity: sha512-kZQPzbDau35iWOhy3CpkrRC7It+HIHtulAzBhMqzGHKRf/4+vmh8rPDDdv98SWQrFWo6//3ozwsRmwQIPZsK9g==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -3486,7 +3488,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.11.15
+      '@types/node': 18.11.16
       esbuild: 0.16.7
       postcss: 8.4.20
       resolve: 1.22.1

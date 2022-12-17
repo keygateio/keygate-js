@@ -2,6 +2,9 @@ import * as publicAPI from "./../generated/public/api";
 import { FetcherOpts } from "./fetcher";
 // import * as adminAPI from "./../generated/admin/api";
 
+import type * as _publicModels from "./../generated/public/model";
+export { _publicModels as publicModels };
+
 const adminAPI = {
 	getAdmin: (_opts: FetcherOpts): Promise<unknown> => {
 		return Promise.resolve({});

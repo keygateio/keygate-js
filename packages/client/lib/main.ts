@@ -127,8 +127,6 @@ export const createKeygateClient = <T extends StorageBackends>(
 				sessionStorage.setItem("kg-device-id", this.#deviceID);
 			}
 
-			console.log("deviceID", this.#deviceID);
-
 			return this.#deviceID as DeviceID;
 		}
 

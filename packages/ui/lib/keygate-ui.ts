@@ -26,8 +26,6 @@ export class KeygateUI extends LitElement {
 				"KeygateUI: context not set. Did you forget to wrap the component in a <keygate-context-provider> element?",
 			);
 		}
-
-		console.log("client", this.context?.client);
 	}
 
 	render() {

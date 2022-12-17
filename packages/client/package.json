@@ -16,20 +16,24 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "@keygate/api": "workspace:*",
     "@types/uuid": "^9.0.0",
     "nanoid": "^4.0.0"
   },
   "peerDependencies": {
+    "@keygate/api": "^1.0.0",
     "node-fetch": "^3.2.10"
   },
   "peerDependenciesMeta": {
+    "@keygate/api": {
+      "optional": false
+    },
     "node-fetch": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@types/node": "^18.11.15",
+    "@keygate/api": "workspace:*",
+    "@types/node": "^18.11.16",
     "typescript": "^4.9.4",
     "vite": "^4.0.1"
   }

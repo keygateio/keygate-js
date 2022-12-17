@@ -3,6 +3,7 @@
  * Do not edit manually.
  */
 import type {
+	MetaResonse,
 	LoginProcessResponse,
 	LoginProcessRequest,
 	LoginPasswordResponse,
@@ -17,11 +18,8 @@ import { customInstance } from "../../lib/fetcher";
 // eslint-disable-next-line
 type SecondParameter<T extends (...args: any) => any> = T extends (config: any, args: infer P) => any ? P : never;
 
-export const meta = (loginProcessRequest: LoginProcessRequest, options?: SecondParameter<typeof customInstance>) => {
-	return customInstance<LoginProcessResponse>(
-		{ url: `/api/v1/meta`, method: "get", headers: { "Content-Type": "application/json" } },
-		options,
-	);
+export const meta = (options?: SecondParameter<typeof customInstance>) => {
+	return customInstance<MetaResonse>({ url: `/api/v1/meta`, method: "get" }, options);
 };
 
 export const createLoginProcess = (

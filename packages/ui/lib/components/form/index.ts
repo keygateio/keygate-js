@@ -79,8 +79,6 @@ export class KeygateAuthForm extends ClientMixin(LitElement) {
 	#switchPage(e: SwitchPageEvent) {
 		e.preventDefault();
 		this.page = e.detail.page;
-		console.log(e.detail.email);
-
 		if (e.detail.email) this.email = e.detail.email;
 	}
 

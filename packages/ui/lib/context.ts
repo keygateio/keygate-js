@@ -1,20 +1,30 @@
-import { createKeygateClient, Keygate, KeygateOptions, StorageBackends } from "@keygate/client";
-import { createContext, provide } from "@lit-labs/context";
 import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { createContext, provide, consume as contextConsume } from "@lit-labs/context";
 
-import { consume as contextConsume } from "@lit-labs/context";
+import { createKeygateClient, Keygate, KeygateOptions, StorageBackends } from "@keygate/client";
+import { publicModels } from "@keygate/api";
 
 export const consumeKeygateContext = () => contextConsume({ context: keygateContext, subscribe: true });
 
 export type KeygateContext =
 	| {
-			client?: Keygate;
+			client?: undefined;
 			clientReady: false;
+			meta?: undefined;
+			metaReady: false;
 	  }
 	| {
 			client: Keygate;
 			clientReady: true;
+			meta?: undefined;
+			metaReady: false;
+	  }
+	| {
+			client: Keygate;
+			clientReady: true;
+			meta: publicModels.MetaResonse;
+			metaReady: true;
 	  };
 
 export const keygateContext = createContext<KeygateContext>("keygate");
@@ -32,7 +42,15 @@ export class KeygateContextProvider<T extends StorageBackends> extends LitElemen
   @property({attribute: false})
 	public context: KeygateContext = {
 		clientReady: false,
+		metaReady: false,
 	};
+
+	async #loadMeta() {
+		if (!this.context.client) throw new Error("KeygateClientController: client not set");
+		let meta = await this.context.client.api.meta();
+		this.context.meta = meta;
+		this.context.metaReady = true;
+	}
 
 	firstUpdated() {
 		if (this.customClient) return;
@@ -51,13 +69,24 @@ export class KeygateContextProvider<T extends StorageBackends> extends LitElemen
 
 		let clientPromise = createKeygateClient(options);
 		if (clientPromise instanceof Promise) {
-			clientPromise.then((client) => {
-				this.context.client = client;
-				this.context.clientReady = true;
-			});
+			clientPromise
+				.then((client) => {
+					this.context.client = client;
+					this.context.clientReady = true;
+					return this.#loadMeta().catch((err) => {
+						console.error(`KeygateClientController: failed to load metadata: ${err}`);
+					});
+				})
+				.catch((err) => {
+					console.error(`KeygateClientController: failed to create client: ${err}`);
+				});
 		} else {
 			this.context.client = clientPromise;
 			this.context.clientReady = true;
+
+			this.#loadMeta().catch((err) => {
+				console.error(`KeygateClientController: failed to load metadata: ${err}`);
+			});
 		}
 	}
 
