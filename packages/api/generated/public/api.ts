@@ -17,6 +17,13 @@ import { customInstance } from "../../lib/fetcher";
 // eslint-disable-next-line
 type SecondParameter<T extends (...args: any) => any> = T extends (config: any, args: infer P) => any ? P : never;
 
+export const meta = (loginProcessRequest: LoginProcessRequest, options?: SecondParameter<typeof customInstance>) => {
+	return customInstance<LoginProcessResponse>(
+		{ url: `/api/v1/meta`, method: "get", headers: { "Content-Type": "application/json" } },
+		options,
+	);
+};
+
 export const createLoginProcess = (
 	loginProcessRequest: LoginProcessRequest,
 	options?: SecondParameter<typeof customInstance>,
@@ -81,6 +88,7 @@ export const refresh = (options?: SecondParameter<typeof customInstance>) => {
 	return customInstance<RefreshResponse>({ url: `/api/v1/session/refresh/refresh`, method: "post" }, options);
 };
 
+export type MetaResult = NonNullable<Awaited<ReturnType<typeof meta>>>;
 export type CreateLoginProcessResult = NonNullable<Awaited<ReturnType<typeof createLoginProcess>>>;
 export type LoginProcessPasswordResult = NonNullable<Awaited<ReturnType<typeof loginProcessPassword>>>;
 export type CreateSignupProcessResult = NonNullable<Awaited<ReturnType<typeof createSignupProcess>>>;
