@@ -1,9 +1,9 @@
 import { css, LitElement } from "lit";
 import { query } from "lit/decorators.js";
 import { Page } from ".";
-import { ClientMixin } from "../../context";
+import { ClientMixin, ClientMixinInterface } from "../../context";
 
-export declare class FormMixinInterface {
+export declare class FormMixinInterface extends ClientMixinInterface {
 	_switchPage(detail: SwitchPageEvent["detail"]): void;
 	_redirect(detail: RedirectEvent["detail"]): void;
 	_switchWithEmail(page: Page): () => void;
