@@ -106,6 +106,8 @@ declare global {
 export declare class ClientMixinInterface {
 	client: Keygate;
 	clientReady: boolean;
+	meta: publicModels.MetaResonse;
+	metaReady: boolean;
 }
 
 // rome-ignore lint/suspicious/noExplicitAny: this is fine
@@ -121,9 +123,14 @@ export const ClientMixin = <T extends Constructor<LitElement>>(superClass: T) =>
 			return this._context?.clientReady;
 		}
 
-		get client() {
-			if (!this?._context?.clientReady) throw new Error("KeygateClientController: client not ready");
-			return this._context.client;
+		@state()
+		get metaReady() {
+			return this._context?.metaReady;
+		}
+
+		get meta() {
+			if (!this?._context?.metaReady) throw new Error("KeygateClientController: client not ready");
+			return this._context.meta;
 		}
 	}
 

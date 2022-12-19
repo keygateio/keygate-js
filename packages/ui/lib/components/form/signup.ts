@@ -1,6 +1,7 @@
 import { msg } from "@lit/localize";
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { Mutation } from "../../query";
 import { FormMixin, formStyles } from "./utils";
 
 type Step = "signup" | "signup-password";
@@ -11,6 +12,9 @@ export class SignupForm extends FormMixin(LitElement) {
 
 	@property({ type: String })
 	initialEmail?: string;
+
+	createSignupProcess = new Mutation(this, "signup", this.client.api.createSignupProcess);
+	signupProcessPassword = new Mutation(this, "signup-password", this.client.api.signupProcessPassword);
 
 	render() {
 		switch (this._step) {
