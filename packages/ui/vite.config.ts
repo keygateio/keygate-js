@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => {
 				entry: resolve(__dirname, "lib/keygate-ui.ts"),
 				name: "KeygateUI",
 				fileName: "keygate-ui",
+				formats: ["es", "umd", "cjs"],
 			},
 			rollupOptions: {
 				input,

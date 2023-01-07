@@ -1,5 +1,5 @@
 import { ReactiveController, ReactiveControllerHost } from "lit";
-import { state } from "lit/decorators";
+import { state } from "lit/decorators.js";
 
 /// My attempt at a query/mutation system similar to React Query for Lit
 
